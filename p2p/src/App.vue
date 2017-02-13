@@ -1,12 +1,17 @@
 <template>
 	<div id="app">
-		44455666
+		<guide></guide>
 	</div>
 </template>
 
 <script>
-export default {
-};
+	import guide from 'components/guide/guide';
+
+	export default {
+		components: {
+			guide
+		}
+	};
 </script>
 
 <style>

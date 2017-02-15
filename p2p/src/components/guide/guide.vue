@@ -21,6 +21,7 @@
 
 <script>
 	import {swiper, swiperSlide} from 'vue-awesome-swiper';
+	import axios from 'axios';
 
 	export default {
 		data() {
@@ -43,8 +44,20 @@
 	        debugger: true,
 	        onTransitionStart(swiper) {
 	        }
-	      }
+	      },
+	      guideMaps: []
 			};
+		},
+		created () {
+			axios.get('/api/guides')
+				.then(function (response) {
+			    console.log(response);
+			  })
+			  .catch(function (response) {
+			    console.log(response);
+			  });
+		},
+		computed: {
 		},
 		components: {
 			swiper,

@@ -1,9 +1,28 @@
 {
-	"guides": [
-		"static/images/guide-map-1.jpg",
-		"static/images/guide-map-2.jpg",
-		"static/images/guide-map-3.jpg",
-		"static/images/guide-map-4.jpg",
-		"static/images/guide-map-5.jpg"
-	]
+
+	"guides": {
+		"update": true,
+		"Maps": [
+			{
+				"map": "static/images/guide-map-1.jpg",
+				"link": ""
+			},
+			{
+				"map": "static/images/guide-map-2.jpg",
+				"link": ""
+			},
+			{
+				"map": "static/images/guide-map-3.jpg",
+				"link": ""
+			},
+			{
+				"map": "static/images/guide-map-4.jpg",
+				"link": ""
+			},
+			{
+				"map": "static/images/guide-map-5.jpg",
+				"link": "/index.html"
+			}
+		]
+	}
 }

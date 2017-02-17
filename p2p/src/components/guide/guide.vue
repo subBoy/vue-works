@@ -1,7 +1,10 @@
 <template>
-	<div class="guide">
+	<div v-if="update" class="guide">
 		<swiper :options="swiperOption" class="swiper-box">
-			<swiper-slide class="swiper-item" v-for="item in guideMaps"><img :src="item" alt=""></swiper-slide>
+			<swiper-slide class="swiper-item" v-for="item in guideMaps">
+				<a v-if="item.link && item.link !== ''" :href="item.link"></a>
+				<img :src="item.map" width="100%" height="100%" alt="">
+			</swiper-slide>
 			<div class="swiper-pagination"  slot="pagination"></div>
 		  <!-- <div class="swiper-button-prev" slot="button-prev"></div>
 		  <div class="swiper-button-next" slot="button-next"></div>
@@ -25,7 +28,7 @@
 	        // direction: 'vertical',
 	        grabCursor: true,
 	        setWrapperSize: true,
-	        autoHeight: true,
+	        // autoHeight: true,
 	        pagination: '.swiper-pagination',
 	        paginationClickable: true,
 	        // prevButton: '.swiper-button-prev',
@@ -33,12 +36,13 @@
 	        // scrollbar: '.swiper-scrollbar',
 	        mousewheelControl: true,
 	        observeParents: true,
-	        loop: true,
+	        // loop: true,
 	        debugger: true,
 	        onTransitionStart(swiper) {
 	        }
 	      },
-	      guideMaps: []
+	      guideMaps: [],
+	      update: false
 			};
 		},
 		created () {
@@ -46,13 +50,13 @@
 			var _this = this;
 			axios.get('/api/guides')
 				.then(function (response) {
-					if (response.errno === ERR_OK) {
-						_this.guideMaps = response.data.data;
+					if (response.data.errno === ERR_OK) {
+						console.log(response.data.data);
+						_this.guideMaps = response.data.data.Maps;
+						_this.update = response.data.data.update;
 					}
 			  })
-			  .catch(function (response) {
-			    console.log(response);
-			  });
+			  .catch(function (response) {});
 		},
 		computed: {
 		},
@@ -70,6 +74,9 @@
 	}
 	body {
 		background: #eee;
+	}
+	.guide {
+		height: 100%;
 	}
 	.swiper-box {
 		width: 100%;

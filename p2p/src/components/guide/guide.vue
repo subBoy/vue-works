@@ -5,7 +5,7 @@
 				<a v-if="item.link && item.link !== ''" :href="item.link"></a>
 				<img :src="item.map" width="100%" height="100%" alt="">
 			</swiper-slide>
-			<div class="swiper-pagination"  slot="pagination"></div>
+			<div class="swiper-pagination" slot="pagination" v-if="Subscript"></div>
 		  <!-- <div class="swiper-button-prev" slot="button-prev"></div>
 		  <div class="swiper-button-next" slot="button-next"></div>
 		  <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
@@ -39,26 +39,37 @@
 	        // loop: true,
 	        debugger: true,
 	        onTransitionStart(swiper) {
+	          console.log(swiper.activeIndex);
 	        }
 	      },
 	      guideMaps: [],
-	      update: false
+	      update: false,
+	      activeIndex: 0,
+	      swiperLength: 0
 			};
 		},
 		created () {
-			/* eslint no-mixed-spaces-and-tabs: ["error", "smart-tabs"] */
-			var _this = this;
+			let _this = this;
 			axios.get('/api/guides')
 				.then(function (response) {
 					if (response.data.errno === ERR_OK) {
-						console.log(response.data.data);
 						_this.guideMaps = response.data.data.Maps;
+						_this.swiperLength = response.data.data.Maps.length - 1;
 						_this.update = response.data.data.update;
 					}
 			  })
 			  .catch(function (response) {});
 		},
 		computed: {
+			Subscript () {
+				console.log(this.activeIndex);
+				console.log(this.swiperLength);
+				if (this.activeIndex === this.swiperLength) {
+					console.log(this.activeIndex);
+					return false;
+				};
+				return true;
+			}
 		},
 		components: {
 			swiper,

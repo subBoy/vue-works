@@ -1,11 +1,11 @@
 <template>
 	<div v-if="update" class="guide">
-		<swiper :options="swiperOption" class="swiper-box">
+		<swiper :options="swiperOption" class="swiper-box" ref="myswiper">
 			<swiper-slide class="swiper-item" v-for="item in guideMaps">
 				<a v-if="item.link && item.link !== ''" :href="item.link"></a>
 				<img :src="item.map" width="100%" height="100%" alt="">
 			</swiper-slide>
-			<div class="swiper-pagination" slot="pagination" v-if="Subscript"></div>
+			<div class="swiper-pagination" slot="pagination" v-show="Subscript"></div>
 		  <!-- <div class="swiper-button-prev" slot="button-prev"></div>
 		  <div class="swiper-button-next" slot="button-next"></div>
 		  <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+	// import Vue from 'vue';
 	import {swiper, swiperSlide} from 'vue-awesome-swiper';
 	import axios from 'axios';
 
@@ -39,13 +40,13 @@
 	        // loop: true,
 	        debugger: true,
 	        onTransitionStart(swiper) {
-	          console.log(swiper.activeIndex);
 	        }
 	      },
 	      guideMaps: [],
 	      update: false,
 	      activeIndex: 0,
-	      swiperLength: 0
+	      swiperLength: 0,
+	      thisSwiper: {}
 			};
 		},
 		created () {
@@ -56,19 +57,25 @@
 						_this.guideMaps = response.data.data.Maps;
 						_this.swiperLength = response.data.data.Maps.length - 1;
 						_this.update = response.data.data.update;
+						_this.$nextTick(function () {
+							_this.conInd();
+						});
 					}
 			  })
 			  .catch(function (response) {});
 		},
 		computed: {
 			Subscript () {
-				console.log(this.activeIndex);
-				console.log(this.swiperLength);
-				if (this.activeIndex === this.swiperLength) {
-					console.log(this.activeIndex);
+				if (this.thisSwiper.activeIndex && this.thisSwiper.activeIndex === this.swiperLength) {
 					return false;
-				};
-				return true;
+				} else {
+					return true;
+				}
+			}
+		},
+		methods: {
+			conInd () {
+				this.thisSwiper = this.$refs.myswiper.swiper;
 			}
 		},
 		components: {
@@ -79,15 +86,14 @@
 </script>
 
 <style lang="scss">
-	html,body {
-		position: relative;
-		height: 100%;
-	}
-	body {
-		background: #eee;
-	}
 	.guide {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
 		height: 100%;
+		z-index: 99;
+		background-color: #eee;
 	}
 	.swiper-box {
 		width: 100%;

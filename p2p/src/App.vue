@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div>
 		<guide></guide>
 	</div>
 </template>
@@ -15,7 +15,4 @@
 </script>
 
 <style>
-	#app {
-		height: 100%;
-	}
 </style>

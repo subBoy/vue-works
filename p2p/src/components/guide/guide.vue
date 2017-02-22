@@ -101,6 +101,7 @@
 		margin: 0 auto;
 	}
 	.swiper-item {
+		position: relative;
 		height: 100%;
 		text-align: center;
 		font-size: 18px ;
@@ -117,5 +118,14 @@
 		-ms-flex-align: center;
 		-webkit-align-items: center;
 		align-items: center;
+	}
+	.swiper-item a {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 40%;
+		bottom: 0;
+		left: 0;
+		z-index: 10;
 	}
 </style>

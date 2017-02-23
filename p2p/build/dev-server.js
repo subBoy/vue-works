@@ -35,6 +35,10 @@ apiRoutes.get('/guides', function(req, res) {
 	})
 })
 
+app.get('/', function(req, res){
+	res.redirect('/module/index.html')
+})
+
 app.use('/api', apiRoutes)
 
 var compiler = webpack(webpackConfig)

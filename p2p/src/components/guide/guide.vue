@@ -2,7 +2,7 @@
 	<div v-if="update" class="guide">
 		<swiper :options="swiperOption" class="swiper-box" ref="myswiper">
 			<swiper-slide class="swiper-item" v-for="item in guideMaps">
-				<a v-if="item.link && item.link !== ''" :href="item.link"></a>
+				<a v-if="item.link && item.link !== ''" @click="guideHide"></a>
 				<img :src="item.map" width="100%" height="100%" alt="">
 			</swiper-slide>
 			<div class="swiper-pagination" slot="pagination" v-show="Subscript"></div>
@@ -15,6 +15,7 @@
 
 <script>
 	// import Vue from 'vue';
+	// import VueRouter from 'vue-router';
 	import {swiper, swiperSlide} from 'vue-awesome-swiper';
 	import axios from 'axios';
 
@@ -76,6 +77,9 @@
 		methods: {
 			conInd () {
 				this.thisSwiper = this.$refs.myswiper.swiper;
+			},
+			guideHide () {
+				this.update = !this.update;
 			}
 		},
 		components: {

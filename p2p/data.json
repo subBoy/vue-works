@@ -1,28 +1,39 @@
 {
-
-	"guides": {
-		"update": true,
-		"Maps": [
-			{
-				"map": "/static/images/guide-map-1.jpg",
-				"link": ""
-			},
-			{
-				"map": "/static/images/guide-map-2.jpg",
-				"link": ""
-			},
-			{
-				"map": "/static/images/guide-map-3.jpg",
-				"link": ""
-			},
-			{
-				"map": "/static/images/guide-map-4.jpg",
-				"link": ""
-			},
-			{
-				"map": "/static/images/guide-map-5.jpg",
-				"link": "/module/index.html"
-			}
-		]
-	}
+	"updatehHind": true,
+	"guides": [
+		{
+			"map": "/static/images/guide-map-1.jpg",
+			"link": ""
+		},
+		{
+			"map": "/static/images/guide-map-2.jpg",
+			"link": ""
+		},
+		{
+			"map": "/static/images/guide-map-3.jpg",
+			"link": ""
+		},
+		{
+			"map": "/static/images/guide-map-4.jpg",
+			"link": ""
+		},
+		{
+			"map": "/static/images/guide-map-5.jpg",
+			"link": "/module/index.html"
+		}
+	],
+	"slideMaps": [
+		{
+			"map": "/static/images/banner.jpg",
+			"link": "#"
+		},
+		{
+			"map": "/static/images/banner.jpg",
+			"link": "#"
+		},
+		{
+			"map": "/static/images/banner.jpg",
+			"link": "#"
+		}
+	]
 }

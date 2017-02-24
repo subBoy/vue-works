@@ -25,6 +25,8 @@ var app = express()
 var appData = require('../data.json')
 
 var guides = appData.guides
+var slideMaps = appData.slideMaps
+var updatehHind = appData.updatehHind
 
 var apiRoutes = express.Router()
 
@@ -35,7 +37,25 @@ apiRoutes.get('/guides', function(req, res) {
 	})
 })
 
+apiRoutes.get('/slide', function(req, res) {
+	res.json({
+		errno: 0,
+		data: slideMaps
+	})
+})
+
+apiRoutes.get('/update', function(req, res) {
+	res.json({
+		errno: 0,
+		data: updatehHind
+	})
+})
+
 app.use('/api', apiRoutes)
+
+app.get('/', function(req, res) {
+	 res.redirect('/module/index.html')
+})
 
 var compiler = webpack(webpackConfig)
 

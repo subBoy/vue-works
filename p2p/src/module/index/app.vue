@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<Guide :update="update" v-if="update"></Guide>
+		<!-- v-if="update.updatehHind" -->
+		<Guide :update="update" @notGui="notGuide"></Guide>
 		<div class="index">
 			<Vhead></Vhead>
 		</div>
@@ -10,6 +11,7 @@
 <script>
 	import Guide from 'components/guide/guide';
 	import Vhead from 'components/header/vhead';
+	import {urlParse} from 'common/js/util';
   import axios from 'axios';
 
 	const ERR_OK = 0;
@@ -17,18 +19,28 @@
 	export default {
 		data () {
 			return {
-				update: false
+				update: {
+					id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id;
+          })()
+				}
 			};
 		},
 		created () {
-			let _this = this;
-			axios.get('/api/update')
+			axios.get('/api/update?id=' + this.update.id)
 				.then(function (response) {
 					if (response.data.errno === ERR_OK) {
-						_this.update = response.data.data;
+						this.update = Object.assign({}, this.update, response.data.data);
 					}
 			  })
-			  .catch(function (response) {});
+			  .catch(function (response) {
+			  });
+		},
+		methods: {
+			notGuide () {
+				// this.update = false;
+			}
 		},
 		components: {
 			Guide,

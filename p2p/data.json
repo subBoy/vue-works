@@ -1,5 +1,7 @@
 {
-	"updatehHind": true,
+	"newFirst": {
+		"updatehHind": true
+	},
 	"guides": [
 		{
 			"map": "/static/images/guide-map-1.jpg",

@@ -52,7 +52,6 @@
 			axios.get('/api/slide')
 				.then(function (response) {
 					if (response.data.errno === ERR_OK) {
-						console.log(response);
 						_this.slideBanner = response.data.data;
 					}
 			  })

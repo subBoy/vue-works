@@ -24,7 +24,7 @@
 	export default {
 		props: {
 			update: {
-        type: Boolean
+        type: Object
       }
 		},
 		data() {
@@ -85,6 +85,12 @@
 			guideHide () {
 				if (this.update) {
 					this.gHide = !this.gHide;
+					let _this = this;
+					setTimeout(function () {
+						_this.$nextTick(function () {
+							_this.$emit('notGui');
+						});
+					}, 500);
 				};
 			}
 		},

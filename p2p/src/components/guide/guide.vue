@@ -1,5 +1,5 @@
 <template>
-	<div class="guide" :class="{'guide-hide': gHide}">
+	<div v-show="collection" class="guide" :class="{'guide-hide': gHide}">
 		<swiper :options="swiperOption" class="swiper-box" ref="myswiper">
 			<swiper-slide class="swiper-item" v-for="item in guideMaps">
 				<a v-if="item.link && item.link !== ''" @click="guideHide"></a>
@@ -16,6 +16,7 @@
 <script>
 	// import Vue from 'vue';
 	// import VueRouter from 'vue-router';
+	import {loadFromLocal} from 'common/js/store';
 	import {swiper, swiperSlide} from 'vue-awesome-swiper';
 	import axios from 'axios';
 
@@ -52,7 +53,10 @@
 	      guideMaps: [],
 	      activeIndex: 0,
 	      swiperLength: 0,
-	      thisSwiper: {}
+	      thisSwiper: {},
+	      collection: (() => {
+          return loadFromLocal(this.update.id, 'updatehHind', true);
+        })()
 			};
 		},
 		created () {
@@ -66,8 +70,7 @@
 							_this.conInd();
 						});
 					}
-			  })
-			  .catch(function (response) {});
+			  });
 		},
 		computed: {
 			Subscript () {
@@ -83,7 +86,7 @@
 				this.thisSwiper = this.$refs.myswiper.swiper;
 			},
 			guideHide () {
-				if (this.update) {
+				if (this.update.updatehHind) {
 					this.gHide = !this.gHide;
 					let _this = this;
 					setTimeout(function () {

@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<!-- v-if="update.updatehHind" -->
 		<Guide :update="update" @notGui="notGuide"></Guide>
 		<div class="index">
 			<Vhead></Vhead>
@@ -11,6 +10,7 @@
 <script>
 	import Guide from 'components/guide/guide';
 	import Vhead from 'components/header/vhead';
+	import {saveToLocal} from 'common/js/store';
 	import {urlParse} from 'common/js/util';
   import axios from 'axios';
 
@@ -28,18 +28,17 @@
 			};
 		},
 		created () {
-			axios.get('/api/update?id=' + this.update.id)
-				.then(function (response) {
-					if (response.data.errno === ERR_OK) {
-						this.update = Object.assign({}, this.update, response.data.data);
-					}
-			  })
-			  .catch(function (response) {
-			  });
+			let _this = this;
+			axios.get('/api/update?id=' + _this.update.id).then(function (response) {
+				response = response.data;
+				if (response.errno === ERR_OK) {
+					_this.update = Object.assign({}, _this.update, response.data);
+				}
+		  });
 		},
 		methods: {
 			notGuide () {
-				// this.update = false;
+				saveToLocal(this.update.id, 'updatehHind', false);
 			}
 		},
 		components: {

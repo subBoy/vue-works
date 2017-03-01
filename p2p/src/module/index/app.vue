@@ -3,6 +3,7 @@
 		<Guide :update="update" @notGui="notGuide"></Guide>
 		<div class="index">
 			<Vhead></Vhead>
+			<active></active>
 		</div>
 	</div>
 </template>
@@ -10,6 +11,7 @@
 <script>
 	import Guide from 'components/guide/guide';
 	import Vhead from 'components/header/vhead';
+	import active from 'components/active/active';
 	import {saveToLocal} from 'common/js/store';
 	import {urlParse} from 'common/js/util';
   import axios from 'axios';
@@ -43,7 +45,8 @@
 		},
 		components: {
 			Guide,
-			Vhead
+			Vhead,
+			active
 		}
 	};
 </script>

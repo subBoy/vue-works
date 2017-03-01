@@ -27,6 +27,7 @@ var appData = require('../data.json')
 var guides = appData.guides
 var slideMaps = appData.slideMaps
 var newFirst = appData.newFirst
+var active = appData.active
 
 var apiRoutes = express.Router()
 
@@ -48,6 +49,13 @@ apiRoutes.get('/update', function(req, res) {
 	res.json({
 		errno: 0,
 		data: newFirst
+	})
+})
+
+apiRoutes.get('/active', function(req, res) {
+	res.json({
+		errno: 0,
+		data: active
 	})
 })
 

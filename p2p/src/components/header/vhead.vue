@@ -1,5 +1,9 @@
 <template>
-	<div class="v-header">
+	<div class="v-header-wrapper">
+		<div class="v-header">
+			<img class="v-logo" src="/static/images/logo.png" alt="">
+			<span class="v-login"><a href="" class="sign-on">注册</a>/<a href="" class="sign-in">登录</a></span>
+		</div>
 		<swiper :options="swiperOption" class="swiper-box" ref="myswiper">
 			<swiper-slide class="swiper-item" v-for="item in slideBanner">
 				<a :href="item.link">
@@ -26,7 +30,7 @@
 			return {
 				swiperOption: {
 	        notNextTick: true,
-	        autoplay: 3000,
+	        autoplay: 4000,
 	        // direction: 'vertical',
 	        grabCursor: true,
 	        setWrapperSize: true,
@@ -54,8 +58,7 @@
 					if (response.data.errno === ERR_OK) {
 						_this.slideBanner = response.data.data;
 					}
-			  })
-			  .catch(function (response) {});
+			  });
 		},
 		computed: {
 		},
@@ -69,31 +72,67 @@
 </script>
 
 <style lang="scss">
-	.swiper-box {
-		width: 100%;
-		height: 100%;
-		margin: 0 auto;
-	}
-	.swiper-item {
-		position: relative;
-		height: 100%;
-		text-align: center;
-		font-size: 18px ;
-		background: #fff;
-		display: -webkit-box;
-		display: -ms-flexbox;
-		display: -webkit-flex;
-		display: flex;
-		-webkit-box-pack: center;
-		-ms-flex-pack: center;
-		-webkit-justify-content: center;
-		justify-content: center;
-		-webkit-box-align: center;
-		-ms-flex-align: center;
-		-webkit-align-items: center;
-		align-items: center;
-	}
-	.swiper-item a {
-		display: block;
+	.v-header-wrapper {
+		.v-header {
+			position: absolute;
+			width: 100%;
+			left: 0;
+			top: 0;
+			height: 36px;
+			z-index: 10;
+			.v-logo {
+				height: 16px;
+				float: left;
+				padding: 10px;
+			}
+			.v-login {
+				float: right;
+				color: #fff;
+				font-size: 12px;
+				line-height: 36px;
+				padding-right: 8px;
+				.sign-on, .sign-in {
+					display: inline-block;
+					color: #fff;
+					padding: 0 2px;
+				}
+			}
+		}
+		.swiper-box {
+			width: 100%;
+			height: 100%;
+			margin: 0 auto;
+		}
+		.swiper-item {
+			position: relative;
+			height: 100%;
+			text-align: center;
+			font-size: 18px;
+			background: #fff;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			-webkit-justify-content: center;
+			justify-content: center;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			-webkit-align-items: center;
+			align-items: center;
+		}
+		.swiper-item a {
+			display: block;
+		}
+		.swiper-pagination-bullet {
+			width: 20px;
+			height: 5px;
+			border-radius: 5px;
+			background-color: #5c9cfd;
+		}
+		.swiper-pagination-bullet.swiper-pagination-bullet-active {
+			background-color: #fff;
+		}
 	}
 </style>

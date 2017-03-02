@@ -1,7 +1,7 @@
 <template>
 	<div v-if="activeStatus" class="active-wrapper">
 		<div class="active-icon"></div>
-		<ul class="active-list">
+		<ul class="active-list" ref="container">
 			<li class="active-item" v-for="item in active"><a class="text" :href="item.link">{{item.desc}}</a></li>
 		</ul>
 		<div class="active-close"></div>
@@ -15,21 +15,21 @@
 
 	export default {
 		props: {
-      interval: {
-        type: Number,
-        default: 3000
-      },
-      duration: {
-        type: Number,
-        default: 600
-      },
-      direction: {
-        validator (val) {
-          return val === 'up' || val === 'down';
-        },
-        default: 'up'
-      }
-    },
+			interval: {
+				type: Number,
+				default: 3000
+			},
+			duration: {
+				type: Number,
+				default: 600
+			},
+			direction: {
+				validator (val) {
+					return val === 'up' || val === 'down';
+				},
+				default: 'up'
+			}
+		},
 		data () {
 			return {
 				active: {
@@ -40,8 +40,8 @@
 					default: true
 				},
 				height: '',
-        length: 0,
-        currentIndex: 0
+				length: 0,
+				currentIndex: 0
 			};
 		},
 		created () {
@@ -58,105 +58,106 @@
 			});
 		},
 		methods: {
-      /*
-       * 根据方向将第一个或最后一个item复制添加到列表最后或前面，保证下一次轮播连贯
-       * 将单个item高度设置为广播视窗高度
-       */
-      fixList () {
-        let cloneNode, firstItem = this.$els.container.firstElementChild;
-        // 根据item高度设置视窗container高度
-        this.length = this.$els.container.children.length;
-        this.height = firstItem.offsetHeight;
-        if (this.direction === 'up') {
-          // 向上则clone第一个item置于列表末端
-          cloneNode = firstItem.cloneNode(true);
-          this.$els.container.appendChild(cloneNode);
-        } else {
-          // 向下则clone最后一个item置于列表首部
-          cloneNode = this.$els.container.lastElementChild.cloneNode(true);
-          this.$els.container.insertBefore(cloneNode, firstItem);
-        }
-      },
-      /*
-       * 启动轮播
-       */
-      start () {
-        let currenTransitionTime,
-          currenTranslateY;
+			/*
+			 * 根据方向将第一个或最后一个item复制添加到列表最后或前面，保证下一次轮播连贯
+			 * 将单个item高度设置为广播视窗高度
+			 */
+			fixList () {
+				let cloneNode;
+				let firstItem = this.$refs.container.firstElementChild;
+				// 根据item高度设置视窗container高度
+				this.length = this.$refs.container.children.length;
+				this.height = firstItem.offsetHeight;
+				if (this.direction === 'up') {
+					// 向上则clone第一个item置于列表末端
+					cloneNode = firstItem.cloneNode(true);
+					this.$refs.container.appendChild(cloneNode);
+				} else {
+					// 向下则clone最后一个item置于列表首部
+					cloneNode = this.$refs.container.lastElementChild.cloneNode(true);
+					this.$refs.container.insertBefore(cloneNode, firstItem);
+				}
+			},
+			/*
+			 * 启动轮播
+			 */
+			start () {
+				let currenTransitionTime,
+					currenTranslateY;
 
-        // 方向向下，列表初始时跳转到最后item
-        if (this.direction === 'down') this.quickJump(false);
+				// 方向向下，列表初始时跳转到最后item
+				if (this.direction === 'down') this.quickJump(false);
 
-        setInterval(() => {
-          if (this.direction === 'up') {
-            this.currentIndex += 1;
-          } else {
-            this.currentIndex -= 1;
-          }
+				setInterval(() => {
+					if (this.direction === 'up') {
+						this.currentIndex += 1;
+					} else {
+						this.currentIndex -= 1;
+					}
 
-          // 正常轮播transition时间为用户设置duration时间
-          currenTransitionTime = 'transform ' + this.duration+ 'ms ease-in-out';
-          this.setTransition(this.$els.container, currenTransitionTime);
+					// 正常轮播transition时间为用户设置duration时间
+					currenTransitionTime = 'transform ' + this.duration + 'ms ease-in-out';
+					this.setTransition(this.$refs.container, currenTransitionTime);
 
-          // 正常轮播每次currenTranslateY增加一个item高度
-          if (this.direction === 'up') {
-            currenTranslateY = -this.currentIndex * this.height + 'px';
-          } else {
-            currenTranslateY = - (this.currentIndex + 1) * this.height + 'px';
-          }
+					// 正常轮播每次currenTranslateY增加一个item高度
+					if (this.direction === 'up') {
+						currenTranslateY = -this.currentIndex * this.height + 'px';
+					} else {
+						currenTranslateY = -(this.currentIndex + 1) * this.height + 'px';
+					}
 
-          this.setTransform(this.$els.container, 'translate3d(0,' + currenTranslateY + ',0)');
+					this.setTransform(this.$refs.container, 'translate3d(0,' + currenTranslateY + ',0)');
 
-          // 当滑动到首尾边界替补item时，需即刻跳转到正确item位置
-          if(this.currentIndex == this.length){
-            setTimeout(() => {
-              this.quickJump(true);
-            }, this.duration);
-          }else if (this.currentIndex == -1) {
-            setTimeout( ()=> {
-              this.quickJump(false);
-            }, this.duration);
-          }
-        }, this.interval + this.duration);
-      },
-      /*
-       * 设置transition 0ms，再设置translatet位置启动跳转
-       * 由于跳转前后展现的内容完全一样，肉眼看不到跳转过程
-       */
-      quickJump (toFirst) {
-        let currenTranslateY,
-        currenTransitionTime = 'transform 0ms ease-in-out';
+					// 当滑动到首尾边界替补item时，需即刻跳转到正确item位置
+					if (this.currentIndex === this.length) {
+						setTimeout(() => {
+							this.quickJump(true);
+						}, this.duration);
+					} else if (this.currentIndex === -1) {
+						setTimeout(() => {
+							this.quickJump(false);
+						}, this.duration);
+					}
+				}, this.interval + this.duration);
+			},
+			/*
+			 * 设置transition 0ms，再设置translatet位置启动跳转
+			 * 由于跳转前后展现的内容完全一样，肉眼看不到跳转过程
+			 */
+			quickJump (toFirst) {
+				let currenTranslateY;
+				let currenTransitionTime = 'transform 0ms ease-in-out';
 
-        this.setTransition(this.$els.container, currenTransitionTime);
+				this.setTransition(this.$refs.container, currenTransitionTime);
 
-        if (toFirst ){
-          // 跳转到首个item
-          this.currentIndex = 0;
-          currenTranslateY = '0px';
-        } else {
-          this.currentIndex = this.length - 1;
-          currenTranslateY = - (this.currentIndex + 1) * this.height + 'px';
-        }
+				if (toFirst) {
+					// 跳转到首个item
+					this.currentIndex = 0;
+					currenTranslateY = '0px';
+				} else {
+					this.currentIndex = this.length - 1;
+					currenTranslateY = -(this.currentIndex + 1) * this.height + 'px';
+				}
 
-        this.setTransform(this.$els.container, 'translate3d(0,' + currenTranslateY + ',0)');
-      },
-      /*
-       * transition添加浏览器前缀
-       * transform同
-       */
-      setTransition (ele, val) {
-        ele.style.transition = val;
-        ele.style.WebkitTransition = '-webkit-' + val;
-        ele.style.MozTransition = '-moz-' + val;
-        ele.style.OTransition = '-o-' + val;
-      },
-      setTransform (ele, val) {
-        ele.style.transform = val;
-        ele.style.WebkitTransform = val;
-        ele.style.MozTransform = val;
-        ele.style.OTransform = val;
-      }
-    }
+				this.setTransform(this.$refs.container, 'translate3d(0,' + currenTranslateY + ',0)');
+			},
+			/*
+			 * transition添加浏览器前缀
+			 * transform同
+			 */
+			setTransition (ele, val) {
+				ele.style.transition = val;
+				ele.style.WebkitTransition = '-webkit-' + val;
+				ele.style.MozTransition = '-moz-' + val;
+				ele.style.OTransition = '-o-' + val;
+			},
+			setTransform (ele, val) {
+				ele.style.transform = val;
+				ele.style.WebkitTransform = val;
+				ele.style.MozTransform = val;
+				ele.style.OTransform = val;
+			}
+		}
 	};
 </script>
 

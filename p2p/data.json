@@ -55,5 +55,27 @@
 			"desc": "获得“诚商中国•2014年度互联网金融十佳诚信企业”",
 			"link": "#"
 		}
+	],
+	"strength": [
+		{
+			"icon": "/static/images/in-ic-1.png",
+			"desc": "3年积淀",
+			"link": "#"
+		},
+		{
+			"icon": "/static/images/in-ic-2.png",
+			"desc": "存管通",
+			"link": "#"
+		},
+		{
+			"icon": "/static/images/in-ic-3.png",
+			"desc": "CFCA合作",
+			"link": "#"
+		},
+		{
+			"icon": "/static/images/in-ic-4.png",
+			"desc": "强大背景",
+			"link": "#"
+		}
 	]
 }

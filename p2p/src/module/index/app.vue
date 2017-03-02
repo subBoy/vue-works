@@ -4,6 +4,7 @@
 		<div class="index">
 			<Vhead></Vhead>
 			<active></active>
+			<Bg></Bg>
 		</div>
 	</div>
 </template>
@@ -12,6 +13,7 @@
 	import Guide from 'components/guide/guide';
 	import Vhead from 'components/header/vhead';
 	import active from 'components/active/active';
+	import Bg from 'components/bg/bg';
 	import {saveToLocal} from 'common/js/store';
 	import {urlParse} from 'common/js/util';
   import axios from 'axios';
@@ -46,7 +48,8 @@
 		components: {
 			Guide,
 			Vhead,
-			active
+			active,
+			Bg
 		}
 	};
 </script>

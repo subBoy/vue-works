@@ -4,7 +4,7 @@
 		<ul class="active-list" ref="container">
 			<li class="active-item" v-for="item in active"><a class="text" :href="item.link">{{item.desc}}</a></li>
 		</ul>
-		<div class="active-close"></div>
+		<div class="active-close" @click="activeClose"></div>
 	</div>
 </template>
 
@@ -156,6 +156,10 @@
 				ele.style.WebkitTransform = val;
 				ele.style.MozTransform = val;
 				ele.style.OTransform = val;
+			},
+			// 隐藏公告栏
+			activeClose () {
+				this.activeStatus = !this.activeStatus;
 			}
 		}
 	};
@@ -166,6 +170,7 @@
 		display: flex;
 		height: 20px;
 		background-image: linear-gradient(to left, #3bc4ff, #3dc7ff);
+		overflow: hidden;
 		.active-icon {
 			flex: 0 0 25px;
 			margin-right: 5px;

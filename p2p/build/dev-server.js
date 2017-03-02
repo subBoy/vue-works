@@ -28,6 +28,7 @@ var guides = appData.guides
 var slideMaps = appData.slideMaps
 var newFirst = appData.newFirst
 var active = appData.active
+var strength = appData.strength
 
 var apiRoutes = express.Router()
 
@@ -56,6 +57,13 @@ apiRoutes.get('/active', function(req, res) {
 	res.json({
 		errno: 0,
 		data: active
+	})
+})
+
+apiRoutes.get('/strength', function(req, res) {
+	res.json({
+		errno: 0,
+		data: strength
 	})
 })
 

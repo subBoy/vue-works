@@ -77,5 +77,14 @@
 			"desc": "强大背景",
 			"link": "#"
 		}
-	]
+	],
+	"latestProject": {
+		"id": "201703031728",
+		"name": "某医疗机构资金周转1611-2101",
+		"Quota": 50,
+		"term": 12,
+		"interestRate": 10.0,
+		"Hike": 0,
+		"schedule": 65.75
+	}
 }

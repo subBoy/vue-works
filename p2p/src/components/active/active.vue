@@ -1,5 +1,5 @@
 <template>
-	<div v-if="activeStatus" class="active-wrapper">
+	<div v-show="activeStatus" class="active-wrapper" :class="{'active-hide': activeHide}">
 		<div class="active-icon"></div>
 		<ul class="active-list" ref="container">
 			<li class="active-item" v-for="item in active"><a class="text" :href="item.link">{{item.desc}}</a></li>
@@ -35,10 +35,8 @@
 				active: {
 					type: Object
 				},
-				activeStatus: {
-					type: Boolean,
-					default: true
-				},
+				activeStatus: true,
+				activeHide: false,
 				height: '',
 				length: 0,
 				currentIndex: 0
@@ -159,7 +157,11 @@
 			},
 			// 隐藏公告栏
 			activeClose () {
-				this.activeStatus = !this.activeStatus;
+				this.activeHide = !this.activeHide;
+				let _this = this;
+				setTimeout(function () {
+					_this.activeStatus = !_this.activeStatus;
+				}, 500);
 			}
 		}
 	};
@@ -171,6 +173,10 @@
 		height: 20px;
 		background-image: linear-gradient(to left, #3bc4ff, #3dc7ff);
 		overflow: hidden;
+		transition: all 0.5s;
+		&.active-hide {
+			transform: translate3d(-100%, 0, 0);
+		}
 		.active-icon {
 			flex: 0 0 25px;
 			margin-right: 5px;

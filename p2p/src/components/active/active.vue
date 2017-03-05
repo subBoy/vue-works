@@ -51,6 +51,7 @@
 					_this.$nextTick(() => {
 						_this.fixList();
 						_this.start();
+						_this.$emit('scrollId');
 					});
 				}
 			});
@@ -190,8 +191,8 @@
 			flex: 1;
 			.active-item .text {
 				display: block;
-				line-height: 20px;
 				font-size: 9px;
+				line-height: 20px;
 				white-space:nowrap;
 				overflow:hidden;
 				text-overflow:ellipsis;

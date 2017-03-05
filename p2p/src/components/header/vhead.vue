@@ -57,6 +57,9 @@
 				.then(function (response) {
 					if (response.data.errno === ERR_OK) {
 						_this.slideBanner = response.data.data;
+						_this.$nextTick(() => {
+							_this.$emit('scrollId');
+						});
 					}
 			  });
 		},

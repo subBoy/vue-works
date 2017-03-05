@@ -84,7 +84,7 @@
 		"Quota": 50,
 		"term": 12,
 		"interestRate": 10.0,
-		"Hike": 0,
+		"Hike": 1.5,
 		"schedule": 65.75
 	}
 }

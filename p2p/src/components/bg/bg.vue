@@ -28,6 +28,9 @@
 				response = response.data;
 				if (response.errno === ERR_OK) {
 					_this.strength = response.data;
+					_this.$nextTick(() => {
+						_this.$emit('scrollId');
+					});
 				}
 			});
 		}

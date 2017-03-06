@@ -1,5 +1,5 @@
 <template>
-	<div class="strength-bg-wrapper">
+	<div class="strength-bg-wrapper" ref="appA">
 		<ul class="strength-bg-list">
 			<li class="strength-bg-item" v-for="item in strength">
 				<a :href="item.link" class="link"><img :src="item.icon" class="map" width="44"></a>
@@ -28,11 +28,25 @@
 				response = response.data;
 				if (response.errno === ERR_OK) {
 					_this.strength = response.data;
-					_this.$nextTick(() => {
+					_this.$nextTick(function () {
 						_this.$emit('scrollId');
+						_this.loadImage(_this.strength[0].icon, _this.call);
 					});
 				}
 			});
+		},
+		methods: {
+			loadImage (url, callback) {
+		    let img = new Image();
+		    img.onload = function () {
+	        img.onload = null;
+	        callback();
+		    };
+		    img.src = url;
+			},
+			call () {
+				this.$emit('scrollId');
+			}
 		}
 	};
 </script>

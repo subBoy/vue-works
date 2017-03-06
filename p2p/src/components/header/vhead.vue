@@ -1,5 +1,5 @@
 <template>
-	<div class="v-header-wrapper">
+	<div class="v-header-wrapper" ref="appA">
 		<div class="v-header">
 			<img class="v-logo" src="/static/images/logo.png" alt="">
 			<span class="v-login"><a href="" class="sign-on">注册</a>/<a href="" class="sign-in">登录</a></span>
@@ -58,7 +58,7 @@
 					if (response.data.errno === ERR_OK) {
 						_this.slideBanner = response.data.data;
 						_this.$nextTick(() => {
-							_this.$emit('scrollId');
+							_this.loadImage(_this.slideBanner[0].map, _this.call);
 						});
 					}
 			  });
@@ -66,6 +66,18 @@
 		computed: {
 		},
 		methods: {
+			loadImage (url, callback) {
+		    let img = new Image();
+		    img.onload = function () {
+	        img.onload = null;
+	        callback();
+		    };
+		    img.src = url;
+			},
+			call () {
+				this.$emit('scrollId');
+				this.$emit('load');
+			}
 		},
 		components: {
 			swiper,
@@ -127,6 +139,7 @@
 		}
 		.swiper-item a {
 			display: block;
+			width: 100%;
 		}
 		.swiper-pagination-bullet {
 			width: 20px;

@@ -1,8 +1,8 @@
 <template>
-	<div class="latest">
+	<div class="latest" ref="appA">
 		<h3 class="name">{{latest.name}}</h3>
 		<div class="latest-info">
-			<canvas id="canvas" width="180" height="180">
+			<canvas id="canvas" width="1800" height="1800">
 			  <p>抱歉，您的浏览器不支持canvas</p>
 			</canvas>
 			<div class="latest-info-wrapper">
@@ -42,7 +42,7 @@
 				response = response.data;
 				if (response.errno === ERR_OK) {
 					_this.latest = response.data;
-					toCanvas('canvas', _this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, 83, 8);
+					toCanvas('canvas', _this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, 830, 80);
 					_this.$nextTick(() => {
 						_this.interestRate();
 					});
@@ -60,8 +60,6 @@
 					interestRateVal = parseFloat(rate).toFixed(2);
 				}
 				this.rateVal = interestRateVal;
-				this.$emit('load');
-				this.$emit('scrollId');
 			}
 		}
 	};
@@ -78,7 +76,17 @@
 		}
 		.latest-info {
 			position: relative;
+			height: 180px;
 			text-align: center;
+			#canvas {
+				position: absolute;
+				top: 0;
+				left: 50%;
+				margin-left: -90px;
+				z-index: 1;
+				transform:scale(0.1, 0.1);
+				transform-origin: 0 0;
+			}
 		}
 		.latest-info-wrapper {
 			position: absolute;

@@ -1,10 +1,10 @@
 <template>
-	<div v-show="activeStatus" class="active-wrapper" :class="{'active-hide': activeHide}">
+	<div v-show="activeStatus" class="active-wrapper" :class="{'active-hide': activeHide}" ref="appA">
 		<div class="active-icon"></div>
-		<ul class="active-list" ref="container">
+		<ul class="active-list" id="active-list">
 			<li class="active-item" v-for="item in active"><a class="text" :href="item.link">{{item.desc}}</a></li>
 		</ul>
-		<div class="active-close" @click="activeClose"></div>
+		<div class="active-close" @click="activeClose($event)"></div>
 	</div>
 </template>
 
@@ -51,7 +51,6 @@
 					_this.$nextTick(() => {
 						_this.fixList();
 						_this.start();
-						_this.$emit('scrollId');
 					});
 				}
 			});
@@ -63,26 +62,28 @@
 			 */
 			fixList () {
 				let cloneNode;
-				let firstItem = this.$refs.container.firstElementChild;
+				let activeList = document.getElementById('active-list');
+				let firstItem = activeList.firstElementChild;
 				// 根据item高度设置视窗container高度
-				this.length = this.$refs.container.children.length;
+				this.length = activeList.children.length;
 				this.height = firstItem.offsetHeight;
 				if (this.direction === 'up') {
 					// 向上则clone第一个item置于列表末端
 					cloneNode = firstItem.cloneNode(true);
-					this.$refs.container.appendChild(cloneNode);
+					activeList.appendChild(cloneNode);
 				} else {
 					// 向下则clone最后一个item置于列表首部
-					cloneNode = this.$refs.container.lastElementChild.cloneNode(true);
-					this.$refs.container.insertBefore(cloneNode, firstItem);
+					cloneNode = activeList.lastElementChild.cloneNode(true);
+					activeList.insertBefore(cloneNode, firstItem);
 				}
 			},
 			/*
 			 * 启动轮播
 			 */
 			start () {
-				let currenTransitionTime,
-					currenTranslateY;
+				let currenTransitionTime;
+				let currenTranslateY;
+				let activeList = document.getElementById('active-list');
 
 				// 方向向下，列表初始时跳转到最后item
 				if (this.direction === 'down') this.quickJump(false);
@@ -96,7 +97,7 @@
 
 					// 正常轮播transition时间为用户设置duration时间
 					currenTransitionTime = 'transform ' + this.duration + 'ms ease-in-out';
-					this.setTransition(this.$refs.container, currenTransitionTime);
+					this.setTransition(activeList, currenTransitionTime);
 
 					// 正常轮播每次currenTranslateY增加一个item高度
 					if (this.direction === 'up') {
@@ -105,7 +106,7 @@
 						currenTranslateY = -(this.currentIndex + 1) * this.height + 'px';
 					}
 
-					this.setTransform(this.$refs.container, 'translate3d(0,' + currenTranslateY + ',0)');
+					this.setTransform(activeList, 'translate3d(0,' + currenTranslateY + ',0)');
 
 					// 当滑动到首尾边界替补item时，需即刻跳转到正确item位置
 					if (this.currentIndex === this.length) {
@@ -126,8 +127,9 @@
 			quickJump (toFirst) {
 				let currenTranslateY;
 				let currenTransitionTime = 'transform 0ms ease-in-out';
+				let activeList = document.getElementById('active-list');
 
-				this.setTransition(this.$refs.container, currenTransitionTime);
+				this.setTransition(activeList, currenTransitionTime);
 
 				if (toFirst) {
 					// 跳转到首个item
@@ -138,7 +140,7 @@
 					currenTranslateY = -(this.currentIndex + 1) * this.height + 'px';
 				}
 
-				this.setTransform(this.$refs.container, 'translate3d(0,' + currenTranslateY + ',0)');
+				this.setTransform(activeList, 'translate3d(0,' + currenTranslateY + ',0)');
 			},
 			/*
 			 * transition添加浏览器前缀
@@ -157,11 +159,15 @@
 				ele.style.OTransform = val;
 			},
 			// 隐藏公告栏
-			activeClose () {
+			activeClose (event) {
+				if (!event._constructed) {
+          return;
+        };
 				this.activeHide = !this.activeHide;
 				let _this = this;
 				setTimeout(function () {
 					_this.activeStatus = !_this.activeStatus;
+					this.$emit('scrollId');
 				}, 500);
 			}
 		}

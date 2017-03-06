@@ -4,14 +4,15 @@
 		<Guide :update="update" @notGui="notGuide"></Guide>
 		<div class="index-wrapper">
 			<div class="index-box" ref="indexWrapper">
-				<div>
-					<Vhead @scrollId="idScroll"></Vhead>
+				<div ref="caa">
+					<Vhead @load="loading" @scrollId="idScroll"></Vhead>
 					<active @scrollId="idScroll"></active>
 					<Bg @scrollId="idScroll"></Bg>
-					<Latest @load="loading" @scrollId="idScroll"></Latest>
+					<Latest></Latest>
 				</div>
 			</div>
 		</div>
+		<Vfoot></Vfoot>
 	</div>
 </template>
 
@@ -23,6 +24,7 @@
 	import Bg from 'components/bg/bg';
 	import Latest from 'components/latestProject/Latest';
 	import loading from 'components/loading/loading';
+	import Vfoot from 'components/footer/footer';
 	import {saveToLocal} from 'common/js/store';
 	import {urlParse} from 'common/js/util';
   import axios from 'axios';
@@ -47,9 +49,7 @@
 				response = response.data;
 				if (response.errno === ERR_OK) {
 					_this.update = Object.assign({}, _this.update, response.data);
-					_this.$nextTick(() => {
-						_this.idScroll();
-					});
+					console.log(_this.$refs.caa.offsetHeight);
 				}
 		  });
 		},
@@ -61,13 +61,20 @@
 				this.loaded = !this.loaded;
 			},
 			idScroll () {
-				this._initScroll();
+				this.$nextTick(() => {
+					this._initScroll();
+				});
 			},
 			_initScroll (event) {
         if (!this.indexScroll) {
           this.indexScroll = new BScroll(this.$refs.indexWrapper, {
-            click: true
+            click: true,
+            probeType: 3
           });
+	        this.indexScroll.on('scroll', function (pos) {
+						// console.log(Math.abs(Math.round(pos.y)));
+						// console.log(Math.round(pos.y));
+	        });
         } else {
           this.indexScroll.refresh();
         }
@@ -79,7 +86,8 @@
 			active,
 			Bg,
 			Latest,
-			loading
+			loading,
+			Vfoot
 		}
 	};
 </script>

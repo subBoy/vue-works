@@ -111,7 +111,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		z-index: 99;
+		z-index: 99999;
 		background-color: #eee;
 		transition: all 0.5s;
 		&.guide-hide {

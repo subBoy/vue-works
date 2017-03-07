@@ -1,7 +1,7 @@
 <template>
 	<div v-show="activeStatus" class="active-wrapper" :class="{'active-hide': activeHide}" ref="appA">
 		<div class="active-icon"></div>
-		<ul class="active-list" id="active-list">
+		<ul class="active-list" ref="activeWrapper">
 			<li class="active-item" v-for="item in active"><a class="text" :href="item.link">{{item.desc}}</a></li>
 		</ul>
 		<div class="active-close" @click="activeClose($event)"></div>
@@ -62,7 +62,7 @@
 			 */
 			fixList () {
 				let cloneNode;
-				let activeList = document.getElementById('active-list');
+				let activeList = this.$refs.activeWrapper;
 				let firstItem = activeList.firstElementChild;
 				// 根据item高度设置视窗container高度
 				this.length = activeList.children.length;
@@ -83,7 +83,7 @@
 			start () {
 				let currenTransitionTime;
 				let currenTranslateY;
-				let activeList = document.getElementById('active-list');
+				let activeList = this.$refs.activeWrapper;
 
 				// 方向向下，列表初始时跳转到最后item
 				if (this.direction === 'down') this.quickJump(false);
@@ -127,7 +127,7 @@
 			quickJump (toFirst) {
 				let currenTranslateY;
 				let currenTransitionTime = 'transform 0ms ease-in-out';
-				let activeList = document.getElementById('active-list');
+				let activeList = this.$refs.activeWrapper;
 
 				this.setTransition(activeList, currenTransitionTime);
 

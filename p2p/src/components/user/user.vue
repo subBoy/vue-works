@@ -1,32 +1,50 @@
 <template>
-	<div class="details-wrapper"></div>
+	<div class="users-wrapper">
+		<div class="users-content">
+			<Vtitle :topTitle="titleData"></Vtitle>
+		</div>
+	</div>
 </template>
 
 <script>
+	import Vtitle from 'components/title/title';
+
 	export default {
 		props: {
-			projectId: {
-				type: String
-			}
+		},
+		data () {
+			return {
+				titleData: {
+					name: '我的账户',
+					classN: 1
+				}
+			};
 		},
 		created () {
-			this.$nextTick(() => {
-				console.log(this.projectId);
-			});
+		},
+		components: {
+			Vtitle
 		}
 	};
 </script>
 
 <style lang="scss">
-	.details-wrapper {
-		position: fixed;
+	.users-wrapper {
+		position: absolute;
 		top: 0;
-		left: 0;
+		bottom: 47px;
 		width: 100%;
-		height: 100%;
+		overflow: hidden;
 		transition: all 0.5s;
-		transform: translate3d(100%, 0 , 0);
-		background-color: #000;
-		z-index: 999;
+		z-index: 98;
+		background-color: #ef0;
+		transform: translate3d(0, 0, 0);
+    &.slideRight-enter {
+    	z-index: 100;
+    	transform: translate3d(100%, 0, 0);
+    }
+    .users-content {
+    	padding-bottom: 18px;
+    }
 	}
 </style>

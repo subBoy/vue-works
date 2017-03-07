@@ -1,41 +1,63 @@
 <template>
 	<div class="v-app">
+		<Guide :update="update" @notGui="notGuide"></Guide>
 		<transition :name="transitionName">
-			<router-view></router-view>
+			<keep-alive>
+				<router-view></router-view>
+			</keep-alive>
 		</transition>
 		<Vfoot></Vfoot>
 	</div>
 </template>
 
 <script>
+	import Guide from 'components/guide/guide';
 	import Vindex from 'components/index/index';
 	import Vfoot from 'components/footer/footer';
+	import {saveToLocal} from 'common/js/store';
+	import {urlParse} from 'common/js/util';
+	import axios from 'axios';
+
+	const ERR_OK = 0;
+
 	export default {
 		data () {
 			return {
+				update: {
+					id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id;
+          })()
+				},
 				transitionName: ''
 			};
+		},
+		created () {
+			let _this = this;
+			axios.get('/api/update?id=' + _this.update.id).then(function (response) {
+				response = response.data;
+				if (response.errno === ERR_OK) {
+					_this.update = Object.assign({}, _this.update, response.data);
+				}
+		  });
+		},
+		methods: {
+			notGuide () {
+				saveToLocal(this.update.id, 'updatehHind', false);
+			}
 		},
 		watch: {
 			'$route' (to, from) {
 				const toDepth = to.path + '';
-				const fromDepth = from.path + '';
 				if (toDepth === '/index') {
 					this.transitionName = 'slideLeft';
 					return;
 				}
-				if (fromDepth === '/index' && toDepth === '/list') {
-					this.transitionName = 'slideRight';
-					return;
-				}
-				if (fromDepth === '/user' && toDepth === '/list') {
-					this.transitionName = 'slideLeft';
-					return;
-				}
-				this.transitionName = 'slideLeft';
+				this.transitionName = 'slideRight';
 			}
 		},
 		components: {
+			Guide,
 			Vindex,
 			Vfoot
 		}
@@ -47,20 +69,4 @@
 	.v-app {
 		height: 100%;
 	}
-	// .slideLeft-enter {
-	// 	transform: translate3d(-100%, 0 , 0);
-	// 	background-color: #000;
-	// }
-	// .slideLeft-enter-active {
-	// 	transform: translate3d(0, 0 , 0);
-	// 	background-color: #000;
-	// }
-	// .slideRight-enter {
-	// 	transform: translate3d(100%, 0 , 0);
-	// 	background-color: #000;
-	// }
-	// .slideRight-enter-active {
-	// 	transform: translate3d(0, 0 , 0);
-	// 	background-color: #000;
-	// }
 </style>

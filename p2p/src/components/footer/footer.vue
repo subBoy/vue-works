@@ -2,13 +2,13 @@
 	<div class="footer-wrapper">
 		<ul class="footer-nav">
 			<li class="footer-item">
-				<router-link class="ft-common idx-icon" to="/">首页</router-link>
+				<router-link class="ft-common idx-icon" to="/index">首页</router-link>
 			</li>
 			<li class="footer-item">
-				<router-link class="ft-list-hook" to="/module/index"><img src="/static/images/list-ic_01.png" width="45" height="65" alt=""></router-link>
+				<router-link class="ft-list-hook" to="/list"><img src="/static/images/list-ic_01.png" width="45" height="65" alt=""></router-link>
 			</li>
 			<li class="footer-item">
-				<router-link class="ft-common user-ic" to="/module/user">我的</router-link>
+				<router-link class="ft-common user-ic" to="/user">我的</router-link>
 			</li>
 		</ul>
 	</div>
@@ -25,6 +25,8 @@
 		left: 0;
 		bottom: 0;
 		border-top: 1px solid #ececec;
+		background-color: #fafafa;
+		z-index: 9999;
 		.footer-nav {
 			display: flex;
 			.footer-item {
@@ -42,13 +44,22 @@
 					line-height: 12px;
 					font-size: 10px;
 					color: #464646;
+					&.active {
+						color: #1267FC;
+					}
 					&.idx-icon {
 						background-image: url(/static/images/idx-icon.png);
 						background-size: 19px auto;
+						&.active {
+							background-image: url(/static/images/idx-icon-1.png);
+						}
 					}
 					&.user-ic {
 						background-image: url(/static/images/user-ic.png);
 						background-size: 16px auto;
+						&.active {
+							background-image: url(/static/images/user-ic-1.png);
+						}
 					}
 				}
 				.ft-list-hook {

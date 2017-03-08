@@ -1,8 +1,9 @@
-export function toCanvas (id, progress, circleStartAngle, circleEndAngle, circleAngle, rcircleR, linewidth) {
+export function toCanvas (id, progress, circleStartAngle, circleEndAngle, circleAngle, circleAngleStart, rcircleR, linewidth) {
 	// canvas进度条
 	// circleStartAngle 全部计划的起始角度
 	// circleEndAngle 全部计划的结束角度
 	// circleStartAngle 全部计划的总弧度
+	// circleAngleStart 圆弧开始角度
   let canvas = document.getElementById(id);
   let ctx = canvas.getContext('2d');
   let percent = progress;  // 最终百分比
@@ -81,7 +82,7 @@ export function toCanvas (id, progress, circleStartAngle, circleEndAngle, circle
 		circle(circleX, circleY, radius);
 
 		// 圆弧
-		sector(circleX, circleY, radius, Math.PI * 1, process);
+		sector(circleX, circleY, radius, circleAngleStart, process);
 		// 两端圆点
 		// smallcircle1(150 + Math.cos(2 * Math.PI / 360 * 120) * 100, 150 + Math.sin(2 * Math.PI / 360 * 120) * 100, 5);
 		// smallcircle2(150 + Math.cos(2 * Math.PI / 360 * (120 + process * 3)) * 100, 150 + Math.sin(2 * Math.PI / 360 * (120 + process * 3)) * 100, 5);

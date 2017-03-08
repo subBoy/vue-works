@@ -5,12 +5,12 @@
 			<div class="lists-tiem-wrapper">
 				<h3 class="ensure"><span class="desc">网贷存管通，看得见的保障</span></h3>
 				<ul class="lists-tiem-list">
-					<li class="lists-tiem border-1px" v-for="item in listData">
+					<li class="lists-tiem border-1px" v-for="(item, index) in listData">
 						<h3 class="name">{{item.name}}</h3>
 						<div class="list-tiem-info">
-							<div class="list-tiem-bg"></div>
+							<div class="list-tiem-bg" :class="classList[index]"></div>
 							<div class="list-tiem-canvas">
-								<canvas :id="item.id" width="100" height= "100"></canvas>
+								<canvas :id="'proId' + item.id" width="100" height= "100"></canvas>
 							</div>
 						</div>
 					</li>
@@ -23,6 +23,7 @@
 <script>
 	import BScroll from 'better-scroll';
 	import Vtitle from 'components/title/title';
+	import {toCanvas} from 'common/js/canvas';
 	import axios from 'axios';
 
 	const ERR_OK = 0;
@@ -36,7 +37,8 @@
 				},
 				listsDatas: [],
 				startIndex: 0,
-				dataLength: 2
+				dataLength: 4,
+				classList: []
 			};
 		},
 		created () {
@@ -44,8 +46,16 @@
 			axios.get('/api/projectList').then(function(response) {
 				response = response.data;
 				if (response.errno === ERR_OK) {
-					console.log(response);
 					_this.listsDatas = response.data;
+					for (var i = 0; i < response.data.length; i++) {
+						let nowTime = new Date().getTime();
+						let startTime = new Date(response.data[i].startTime).getTime();
+						if (nowTime >= startTime) {
+							_this.classList.push('started');
+						} else {
+							_this.classList.push('startBefore');
+						}
+					};
 				}
 			});
 		},
@@ -53,13 +63,24 @@
 			listData () {
 				let listes = [];
 				let i = 0;
+				let _this = this;
 				if (this.dataLength <= this.listsDatas.length) {
 					for (i = this.startIndex; i < this.dataLength; i++) {
 						listes.push(this.listsDatas[i]);
+						(function(i) {
+							_this.$nextTick(function () {
+								toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 47, 5);
+							});
+						})(i);
 					};
 				} else {
 					for (i = this.startIndex; i < this.listsDatas.length; i++) {
 						listes.push(this.listsDatas[i]);
+						(function(i) {
+							_this.$nextTick(function () {
+								toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 47, 5);
+							});
+						})(i);
 					};
 				}
 				return listes;
@@ -80,6 +101,11 @@
           this.listScroll.refresh();
         }
       }
+		},
+		mounted () {
+			this.$nextTick(() => {
+				this._initScroll();
+			});
 		},
 		components: {
 			Vtitle
@@ -156,10 +182,15 @@
     					margin: 0 auto 10px auto;
     					width: 100px;
     					height: 100px;
-    					background-image: url(/static/images/list-icon.png);
     					background-repeat: no-repeat;
     					background-position: center;
     					background-size: 100px 100px;
+    					&.started {
+								background-image: url(/static/images/list-icon-1.png);
+    					}
+    					&.startBefore{
+    						background-image: url(/static/images/list-icon.png);
+    					}
     				}
     			}
     		}

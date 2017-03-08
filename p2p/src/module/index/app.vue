@@ -6,7 +6,9 @@
 				<router-view></router-view>
 			</keep-alive>
 		</transition>
-		<Vfoot></Vfoot>
+		<keep-alive>
+			<Vfoot></Vfoot>
+		</keep-alive>
 	</div>
 </template>
 

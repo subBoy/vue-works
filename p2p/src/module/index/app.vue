@@ -48,11 +48,11 @@
 		},
 		watch: {
 			'$route' (to, from) {
-				const toDepth = to.path + '';
-				if (toDepth === '/index') {
-					this.transitionName = 'slideLeft';
-					return;
-				}
+				// const toDepth = to.path + '';
+				// if (toDepth === '/index') {
+				// 	this.transitionName = 'slideLeft';
+				// 	return;
+				// }
 				this.transitionName = 'slideRight';
 			}
 		},
@@ -67,6 +67,8 @@
 
 <style lang="scss">
 	.v-app {
+		width: 100%;
 		height: 100%;
+		overflow: hidden;
 	}
 </style>

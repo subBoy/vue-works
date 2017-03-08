@@ -16,7 +16,7 @@
 			return {
 				titleData: {
 					name: '我的账户',
-					classN: 1
+					classNum: 1
 				}
 			};
 		},

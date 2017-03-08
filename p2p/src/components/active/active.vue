@@ -2,17 +2,13 @@
 	<div v-show="activeStatus" class="active-wrapper" :class="{'active-hide': activeHide}" ref="appA">
 		<div class="active-icon"></div>
 		<ul class="active-list" ref="activeWrapper">
-			<li class="active-item" v-for="item in active"><a class="text" :href="item.link">{{item.desc}}</a></li>
+			<li class="active-item" v-for="item in activeData"><a class="text" :href="item.link">{{item.desc}}</a></li>
 		</ul>
 		<div class="active-close" @click="activeClose($event)"></div>
 	</div>
 </template>
 
 <script>
-	import axios from 'axios';
-
-	const ERR_OK = 0;
-
 	export default {
 		props: {
 			interval: {
@@ -28,13 +24,14 @@
 					return val === 'up' || val === 'down';
 				},
 				default: 'up'
+			},
+			activeData: {
+				type: Array,
+				default: []
 			}
 		},
 		data () {
 			return {
-				active: {
-					type: Object
-				},
 				activeStatus: true,
 				activeHide: false,
 				height: '',
@@ -42,17 +39,10 @@
 				currentIndex: 0
 			};
 		},
-		created () {
-			let _this = this;
-			axios.get('/api/active').then(function (response) {
-				response = response.data;
-				if (response.errno === ERR_OK) {
-					_this.active = response.data;
-					_this.$nextTick(() => {
-						_this.fixList();
-						_this.start();
-					});
-				}
+		updated () {
+			this.$nextTick(() => {
+				this.fixList();
+				this.start();
 			});
 		},
 		methods: {

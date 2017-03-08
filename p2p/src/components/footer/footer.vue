@@ -1,5 +1,5 @@
 <template>
-	<div class="footer-wrapper">
+	<div class="footer-wrapper border-1px">
 		<ul class="footer-nav">
 			<li class="footer-item">
 				<router-link class="ft-common idx-icon" to="/index">首页</router-link>
@@ -18,15 +18,20 @@
 	};
 </script>
 <style lang="scss">
+	@import '../../common/scss/mixin.scss';
+
 	.footer-wrapper {
-		position: fixed;
+		position: fixed!important;
 		width: 100%;
 		height: 46px;
 		left: 0;
 		bottom: 0;
-		border-top: 1px solid #ececec;
 		background-color: #fafafa;
 		z-index: 9999;
+		&:after {
+			top: 0;
+			@include border-1px($color: #ececec);
+		}
 		.footer-nav {
 			display: flex;
 			.footer-item {
@@ -68,6 +73,7 @@
 					bottom: 0;
 					left: 50%;
 					margin-left: -22.5px;
+					z-index: 999;
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 <template>
-	<div class="title-wrapper bg-0">
-		<span class="history-btn"></span>{{topTitle.name}}
+	<div class="title-wrapper" :class="className">
+		<span class="history-btn" @click="goHistory()"></span>{{topTitle.name}}
 	</div>
 </template>
 
@@ -9,6 +9,16 @@
 		props: {
 			topTitle: {
 				type: Object
+			}
+		},
+		methods: {
+			goHistory () {
+        this.$router.go(-1);
+			}
+		},
+		computed: {
+			className () {
+				return 'bg-' + this.topTitle.classNum;
 			}
 		}
 	};

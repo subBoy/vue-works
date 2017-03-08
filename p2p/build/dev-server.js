@@ -30,6 +30,7 @@ var newFirst = appData.newFirst
 var active = appData.active
 var strength = appData.strength
 var latestProject = appData.latestProject
+var projectList = appData.projectList
 
 var apiRoutes = express.Router()
 
@@ -72,6 +73,13 @@ apiRoutes.get('/latestProject', function(req, res) {
 	res.json({
 		errno: 0,
 		data: latestProject
+	})
+})
+
+apiRoutes.get('/projectList', function(req, res) {
+	res.json({
+		errno: 0,
+		data: projectList
 	})
 })
 

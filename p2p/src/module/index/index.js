@@ -11,23 +11,23 @@ import index from 'components/index/index';
 Vue.use(VueRouter);
 
 const routes = [
+	{path: '/', component: index},
 	{path: '/index', component: index},
-  {path: '/detail', component: details},
-  {path: '/list', component: list},
-  {path: '/user', component: user}
+	{path: '/detail', component: details},
+	{path: '/list', component: list},
+	{path: '/user', component: user}
 ];
 
 const router = new VueRouter({
-  linkActiveClass: 'active',
-  routes: routes
+	linkActiveClass: 'active',
+	routes: routes
 });
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  template: '<App/>',
-  router: router,
-  components: { App }
+	el: '#app',
+	template: '<App/>',
+	router: router,
+	components: { App }
 });
 
-router.push('/index');

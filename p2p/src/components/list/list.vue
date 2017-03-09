@@ -1,6 +1,7 @@
 <template>
 	<div class="lists-wrapper">
 		<Vtitle :topTitle="titleData"></Vtitle>
+		<div class="Refresh" ref="refreshWrapper" :style="{top: refreshTop + 'px'}"></div>
 		<div class="lists-content" ref="listsWrapper">
 			<div class="lists-tiem-wrapper">
 				<h3 class="ensure"><span class="desc">网贷存管通，看得见的保障</span></h3>
@@ -50,8 +51,9 @@
 				},
 				listsDatas: [],
 				startIndex: 0,
-				dataLength: 4,
-				classList: []
+				dataLength: 0,
+				classList: [],
+				refreshTop: -26
 			};
 		},
 		created () {
@@ -71,6 +73,11 @@
 					};
 				}
 			});
+			let _h = 0;
+			let _ch = 0;
+			_h = document.body.offsetHeight;
+			_ch = _h - 110;
+			this.dataLength = Math.ceil(_ch / 200);
 		},
 		computed: {
 			listData () {
@@ -109,9 +116,13 @@
             click: true,
             probeType: 3
           });
+          let _this = this;
           this.listScroll.on('scroll', function (pos) {
-						// console.log(Math.abs(Math.round(pos.y)));
-						// console.log(Math.round(pos.y));
+						let _y = Math.round(pos.y);
+						_this.refreshTop = _y - 26;
+						if (_y > 50) {
+							_this.refreshTop = 50;
+						}
 	        });
         } else {
           this.listScroll.refresh();
@@ -187,6 +198,18 @@
     &.slideRight-enter {
     	z-index: 100;
     	transform: translate3d(100%, 0, 0);
+    }
+    .Refresh {
+    	position: fixed;
+    	top: -26px;
+    	left: 50%;
+    	margin-left: -14px;
+    	width: 28px;
+    	height: 28px;
+    	background-image: url(/static/images/Refresh.gif);
+    	background-repeat: no-repeat;
+    	background-position: center;
+    	background-size: 25px 27px;
     }
     .lists-content {
     	position: absolute;

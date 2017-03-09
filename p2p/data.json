@@ -96,7 +96,7 @@
 			"interestRate": 10.0,
 			"Hike": 1.5,
 			"schedule": 65.75,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		},
 		{
 			"id": "20170303172802",
@@ -106,7 +106,7 @@
 			"interestRate": 11.0,
 			"Hike": 1.0,
 			"schedule": 0,
-			"startTime": "2017-03-10 20:00"
+			"startTime": "2017/03/10 20:00"
 		},
 		{
 			"id": "20170303172803",
@@ -116,7 +116,7 @@
 			"interestRate": 10.0,
 			"Hike": 1.5,
 			"schedule": 30.75,
-			"startTime": "2017-03-08 18:00"
+			"startTime": "2017/03/08 18:00"
 		},
 		{
 			"id": "20170303172804",
@@ -126,7 +126,7 @@
 			"interestRate": 12.0,
 			"Hike": 0,
 			"schedule": 100,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		},
 		{
 			"id": "20170303172805",
@@ -136,7 +136,7 @@
 			"interestRate": 10.0,
 			"Hike": 1.5,
 			"schedule": 20.75,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		},
 		{
 			"id": "20170303172806",
@@ -146,7 +146,7 @@
 			"interestRate": 10.0,
 			"Hike": 0,
 			"schedule": 45.75,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		},
 		{
 			"id": "20170303172807",
@@ -156,7 +156,7 @@
 			"interestRate": 10.0,
 			"Hike": 1.5,
 			"schedule": 95.75,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		},
 		{
 			"id": "20170303172808",
@@ -166,7 +166,7 @@
 			"interestRate": 10.0,
 			"Hike": 1.5,
 			"schedule": 0,
-			"startTime": "2017-04-08 08:00"
+			"startTime": "2017/04/08 08:00"
 		},
 		{
 			"id": "20170303172809",
@@ -176,7 +176,7 @@
 			"interestRate": 10.0,
 			"Hike": 1.5,
 			"schedule": 20.75,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		},
 		{
 			"id": "20170303172810",
@@ -186,7 +186,7 @@
 			"interestRate": 10.0,
 			"Hike": 1.5,
 			"schedule": 0.75,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		},
 		{
 			"id": "20170303172811",
@@ -196,7 +196,7 @@
 			"interestRate": 10.0,
 			"Hike": 0.5,
 			"schedule": 0,
-			"startTime": "2017-03-28 08:00"
+			"startTime": "2017/03/28 08:00"
 		},
 		{
 			"id": "20170303172812",
@@ -206,7 +206,7 @@
 			"interestRate": 9.0,
 			"Hike": 1.0,
 			"schedule": 100,
-			"startTime": "2017-03-08 08:00"
+			"startTime": "2017/03/08 08:00"
 		}
 	]
 }

@@ -15,5 +15,6 @@
 		height: 100%;
 		z-index: 99;
 		background: #fff url(/static/images/loading.gif) center center no-repeat;
+		background-size: 150px 150px;
 	}
 </style>

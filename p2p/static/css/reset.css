@@ -38,7 +38,9 @@ img {
 blockquote, q {
 	quotes: none;
 }
-
+em {
+	font-style: normal;
+}
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: none;

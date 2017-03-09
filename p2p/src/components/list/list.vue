@@ -5,14 +5,27 @@
 			<div class="lists-tiem-wrapper">
 				<h3 class="ensure"><span class="desc">网贷存管通，看得见的保障</span></h3>
 				<ul class="lists-tiem-list">
-					<li class="lists-tiem border-1px" v-for="(item, index) in listData">
+					<li class="lists-tiem border-1px" v-for="(item, index) in listData" ref="countWrapper">
 						<h3 class="name">{{item.name}}</h3>
 						<div class="list-tiem-info">
 							<div class="list-tiem-bg" :class="classList[index]"></div>
 							<div class="list-tiem-canvas">
-								<canvas :id="'proId' + item.id" width="100" height= "100"></canvas>
+								<canvas class="canvasStyl" :id="'proId' + item.id" width="1000" height= "1000"></canvas>
+								<div class="tiem-return">
+									<p class="return-txt">
+										<span class="num">{{parseFloat(item.interestRate).toFixed(2)}}</span>
+										<span v-if="item.Hike && item.Hike !== 0" class="num">+{{parseFloat(item.Hike).toFixed(1)}}</span>
+										<span class="unit">%</span>
+									</p>
+									<p class="desc">预期年化收益率</p>
+								</div>
 							</div>
 						</div>
+						<p class="latest-info-list">
+							<span class="Quota latest-info-item"><span class="term-wrapper">融资额：<em class="styl">{{item.Quota}}</em>万元</span></span>
+							<span class="term latest-info-item"><span class="term-wrapper">期限：<em class="styl">{{item.term}}</em>个月</span></span>
+						</p>
+						<div class="details-btn" :class="classList[index]" :startTime="item.startTime" :scheDule="item.schedule"></div>
 					</li>
 				</ul>
 			</div>
@@ -69,7 +82,7 @@
 						listes.push(this.listsDatas[i]);
 						(function(i) {
 							_this.$nextTick(function () {
-								toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 47, 5);
+								toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 470, 50);
 							});
 						})(i);
 					};
@@ -83,29 +96,74 @@
 						})(i);
 					};
 				}
+				_this.$nextTick(function () {
+					_this._initScroll();
+				});
 				return listes;
 			}
 		},
-		motheds: {
+		methods: {
 			_initScroll (event) {
         if (!this.listScroll) {
           this.listScroll = new BScroll(this.$refs.listsWrapper, {
             click: true,
             probeType: 3
           });
-          this.indexScroll.on('scroll', function (pos) {
+          this.listScroll.on('scroll', function (pos) {
 						// console.log(Math.abs(Math.round(pos.y)));
 						// console.log(Math.round(pos.y));
 	        });
         } else {
           this.listScroll.refresh();
+        };
+
+        if (this.$refs.countWrapper) {
+					let countDatas = this.$refs.countWrapper;
+					let len = countDatas.length;
+					let _this = this;
+					for (var i = 0; i < len; i++) {
+						(function (i) {
+							let stTime = countDatas[i].getElementsByClassName('details-btn')[0].getAttribute('startTime');
+							let seDule = countDatas[i].getElementsByClassName('details-btn')[0].getAttribute('scheDule');
+							_this.countDowns(stTime, seDule, i, countDatas[i].getElementsByClassName('details-btn')[0]);
+						})(i);
+					};
         }
-      }
-		},
-		mounted () {
-			this.$nextTick(() => {
-				this._initScroll();
-			});
+      },
+      countDowns (date, schedule, index, obj) {
+				let txt = '';
+				let _this = this;
+				function setInter () {
+					let _date = new Date(date).getTime();
+					let _now = new Date().getTime();
+					let _differ = parseInt(_now - _date);
+					if (_differ >= 0) {
+						if (schedule === '100') {
+							txt = '已售罄';
+						} else {
+							txt = '立即购买';
+						}
+					} else {
+						let _d, _h, _m, _s;
+						_differ = -parseInt(_differ / 1000);
+						_d = parseInt(_differ / 24 / 3600);
+						_h = parseInt((_differ % (24 * 3600)) / 3600);
+						_m = parseInt(((_differ % (24 * 3600)) % 3600) / 60);
+						_s = parseInt(((_differ % (24 * 3600)) % 3600) % 60);
+						_d = _this.padLeftZero(_d + '');
+						_h = _this.padLeftZero(_h + '');
+						_m = _this.padLeftZero(_m + '');
+						_s = _this.padLeftZero(_s + '');
+						txt = _d + '天' + _h + '小时' + _m + '分钟' + _s + '秒' + ' ' + '开放投资';
+					}
+					obj.innerHTML = txt;
+				};
+				setInter();
+				setInterval(setInter, 1000);
+			},
+			padLeftZero (str) {
+			  return ('00' + str).substr(str.length);
+			}
 		},
 		components: {
 			Vtitle
@@ -157,7 +215,7 @@
     	}
     	.lists-tiem-list {
     		.lists-tiem {
-    			padding: 0 10px;
+    			padding: 0 10px 10px 10px;
     			&:after {
     				bottom: 0;
     				@include border-1px($color: #ececec);
@@ -177,6 +235,32 @@
     					width: 100px;
     					height: 100px;
     					margin-left: -50px;
+    					.canvasStyl {
+    						transform:scale(0.1, 0.1);
+								transform-origin: 0 0;
+    					}
+    					.tiem-return {
+    						position: absolute;
+    						top: 0;
+    						left: 0;
+    						width: 100%;
+    						z-index: 1;
+    						text-align: center;
+    						color: #2085fd;
+    						.return-txt {
+									font-size: 0;
+									margin: 40px 0 5px 0;
+									.num {
+										font-size: 18px;
+									}
+									.unit {
+										font-size: 12px;
+									}
+    						}
+    						.desc {
+    							font-size: 8px;
+    						}
+    					}
     				}
     				.list-tiem-bg {
     					margin: 0 auto 10px auto;
@@ -187,6 +271,8 @@
     					background-size: 100px 100px;
     					&.started {
 								background-image: url(/static/images/list-icon-1.png);
+								animation: an1 2s linear infinite alternate;
+								transform-origin: 50% 50%;
     					}
     					&.startBefore{
     						background-image: url(/static/images/list-icon.png);
@@ -195,6 +281,63 @@
     			}
     		}
     	}
+    	.latest-info-list {
+    		display: flex;
+    		padding: 0 30px 10px 30px;
+    		font-size: 0;
+    		.latest-info-item {
+    			display: inline-block;
+    			flex: 1;
+					font-size: 10px;
+					color: #969696;
+					.term-wrapper {
+  					display: inline-block;
+  					padding-left: 17px;
+  					background-repeat: no-repeat;
+						background-position: left 0;
+						background-size: 14px 12px;
+						.styl {
+							font-size: 14px;
+						}
+  				}
+  				&.Quota {
+  					border-right: 1px solid #ececec;
+    				.term-wrapper {
+    					@include bg-img($url:'/static/images/q-icon');
+    				}
+    			}
+    			&.term {
+    				.term-wrapper {
+    					@include bg-img($url:'/static/images/term-icon');
+    					float: right;
+    				}
+    			}
+    		}
+    	}
+    	.details-btn {
+    		margin: 0 auto;
+    		width: 170px;
+    		height: 26px;
+    		line-height: 26px;
+    		border-radius: 26px;
+    		color: #fff;
+    		text-align: center;
+    		font-size: 10px;
+				&.started {
+					background-color: #f60;
+				}
+				&.startBefore{
+					background-color: #c8c8c8;
+				}
+    	}
     }
  	}
+ 	@keyframes an1{
+    from{
+    	transform: rotate(5deg);
+    }
+    to{
+    	transform: rotate(-5deg);
+    }
+	}
 </style>

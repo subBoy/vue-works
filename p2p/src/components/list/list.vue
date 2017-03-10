@@ -52,6 +52,7 @@
 					classNum: 0
 				},
 				listsDatas: [],
+				viewDatas: [],
 				startIndex: 0,
 				initLength: 0,
 				dataLength: 0,
@@ -67,16 +68,17 @@
 			_h = document.body.offsetHeight;
 			_ch = _h - 110;
 			this.initLength = Math.ceil(_ch / 200);
-			this.dataLength = Math.ceil(_ch / 200);
+			// 初始化
+			this.startIndex = 0;
+			this.dataLength = this.initLength;
 		},
 		computed: {
 			listData () {
-				let listes = [];
 				let i = 0;
 				let _this = this;
 				if (this.dataLength <= this.listsDatas.length) {
 					for (i = this.startIndex; i < this.dataLength; i++) {
-						listes.push(this.listsDatas[i]);
+						this.viewDatas[i] = this.listsDatas[i];
 						(function(i) {
 							_this.$nextTick(function () {
 								if (_this.listsDatas[i].schedule !== 0) {
@@ -85,10 +87,9 @@
 							});
 						})(i);
 					};
-					loadingBl = true;
 				} else {
 					for (i = this.startIndex; i < this.listsDatas.length; i++) {
-						listes.push(this.listsDatas[i]);
+						this.viewDatas[i] = this.listsDatas[i];
 						(function(i) {
 							_this.$nextTick(function () {
 								if (_this.listsDatas[i].schedule !== 0) {
@@ -97,13 +98,13 @@
 							});
 						})(i);
 					};
-					loadingBl = false;
 				}
+				loadingBl = true;
 				_this.$nextTick(function () {
 					_this._initScroll();
 					_this.refreshBottom = -30;
 				});
-				return listes;
+				return this.viewDatas;
 			}
 		},
 		methods: {
@@ -135,23 +136,26 @@
           this.listScroll.on('scroll', function (pos) {
 						let _y = Math.round(pos.y);
 						_this.refreshTop = _y;
+						// 下拉刷新
 						if (_y > 50) {
 							_this.refreshTop = 50;
-							if (_y > 70) {
+							if (_y > 70 && loadingBl) {
 								_this.listScroll.scrollTo(0, 70, 0);
 								loadingBl = false;
-								window.setTimeout(function () { // 为了模拟数据加载时间间隔
-									_this.loadingData();
-									_this.dataLength = _this.initLength;
-								}, 300);
+								// window.setTimeout(function () { // 为了模拟数据加载时间间隔
+								// 	_this.loadingData();
+								// 	_this.startIndex = 0;
+								// 	_this.dataLength = _this.initLength;
+								// }, 300);
+								window.location.reload(true);
 							}
 						};
-						console.log(loadingBl);
+						// 上拉加载
+						let _adsY = Math.abs(Math.round(pos.y));
+						let _viewh = document.body.offsetHeight - 110;
+						let _boxh = _this.$refs.listTiemWrapper.offsetHeight;
+						let adsY = _boxh - _viewh + 40;
 						if (_y < 0 && loadingBl) {
-							let _adsY = Math.abs(Math.round(pos.y));
-							let _viewh = document.body.offsetHeight - 110;
-							let _boxh = _this.$refs.listTiemWrapper.offsetHeight;
-							let adsY = _boxh - _viewh + 40;
 							_this.refreshBottom = _adsY - _boxh + _viewh;
 							if (_adsY > adsY) {
 								_this.refreshBottom = 70;
@@ -159,10 +163,14 @@
 								if (loadL >= _this.listsDatas.length) {
 									loadL = _this.listsDatas.length;
 								}
+								loadingBl = false;
 								window.setTimeout(function () { // 为了模拟数据加载时间间隔
+									_this.startIndex = _this.dataLength;
 									_this.dataLength = loadL;
 								}, 300);
 							}
+						} else {
+							_this.refreshBottom = _adsY - _boxh + _viewh;
 						}
 	        });
         } else {

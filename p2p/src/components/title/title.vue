@@ -35,6 +35,7 @@
 		font-size: 16px;
 		color: #fff;
 		text-align: center;
+		z-index: 10;
 		&.bg-0 {
 			background: linear-gradient(to right,  #3dc7ff 0%, #1a78fc 100%);
 		}

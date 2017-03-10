@@ -1,9 +1,10 @@
 <template>
 	<div class="lists-wrapper">
 		<Vtitle :topTitle="titleData"></Vtitle>
-		<div class="Refresh" ref="refreshWrapper" :style="{top: refreshTop + 'px'}"></div>
+		<div class="Refresh" :style="{top: refreshTop + 'px'}"></div>
+		<div class="onloading" :class="{'loaded': dataLength === listsDatas.length}" :style="{bottom: refreshBottom + 'px'}"><span class="desc" v-if="dataLength === listsDatas.length">已经没有更多！！！</span></div>
 		<div class="lists-content" ref="listsWrapper">
-			<div class="lists-tiem-wrapper">
+			<div class="lists-tiem-wrapper" ref="listTiemWrapper">
 				<h3 class="ensure"><span class="desc">网贷存管通，看得见的保障</span></h3>
 				<ul class="lists-tiem-list">
 					<li class="lists-tiem border-1px" v-for="(item, index) in listData" ref="countWrapper">
@@ -41,6 +42,7 @@
 	import axios from 'axios';
 
 	const ERR_OK = 0;
+	let loadingBl = true;
 
 	export default {
 		data () {
@@ -51,32 +53,20 @@
 				},
 				listsDatas: [],
 				startIndex: 0,
+				initLength: 0,
 				dataLength: 0,
 				classList: [],
-				refreshTop: -26
+				refreshTop: -30,
+				refreshBottom: -30
 			};
 		},
 		created () {
-			let _this = this;
-			axios.get('/api/projectList').then(function(response) {
-				response = response.data;
-				if (response.errno === ERR_OK) {
-					_this.listsDatas = response.data;
-					for (var i = 0; i < response.data.length; i++) {
-						let nowTime = new Date().getTime();
-						let startTime = new Date(response.data[i].startTime).getTime();
-						if (nowTime >= startTime) {
-							_this.classList.push('started');
-						} else {
-							_this.classList.push('startBefore');
-						}
-					};
-				}
-			});
+			this.loadingData();
 			let _h = 0;
 			let _ch = 0;
 			_h = document.body.offsetHeight;
 			_ch = _h - 110;
+			this.initLength = Math.ceil(_ch / 200);
 			this.dataLength = Math.ceil(_ch / 200);
 		},
 		computed: {
@@ -89,27 +79,52 @@
 						listes.push(this.listsDatas[i]);
 						(function(i) {
 							_this.$nextTick(function () {
-								toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 470, 50);
+								if (_this.listsDatas[i].schedule !== 0) {
+									toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 470, 50);
+								}
 							});
 						})(i);
 					};
+					loadingBl = true;
 				} else {
 					for (i = this.startIndex; i < this.listsDatas.length; i++) {
 						listes.push(this.listsDatas[i]);
 						(function(i) {
 							_this.$nextTick(function () {
-								toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 47, 5);
+								if (_this.listsDatas[i].schedule !== 0) {
+									toCanvas('proId' + _this.listsDatas[i].id, _this.listsDatas[i].schedule, Math.PI * 0, Math.PI * 2, Math.PI * 2, Math.PI * 0, 470, 50);
+								}
 							});
 						})(i);
 					};
+					loadingBl = false;
 				}
 				_this.$nextTick(function () {
 					_this._initScroll();
+					_this.refreshBottom = -30;
 				});
 				return listes;
 			}
 		},
 		methods: {
+			loadingData () {
+				let _this = this;
+				axios.get('/api/projectList').then(function(response) {
+					response = response.data;
+					if (response.errno === ERR_OK) {
+						_this.listsDatas = response.data;
+						for (var i = 0; i < response.data.length; i++) {
+							let nowTime = new Date().getTime();
+							let startTime = new Date(response.data[i].startTime).getTime();
+							if (nowTime >= startTime) {
+								_this.classList.push('started');
+							} else {
+								_this.classList.push('startBefore');
+							}
+						};
+					}
+				});
+			},
 			_initScroll (event) {
         if (!this.listScroll) {
           this.listScroll = new BScroll(this.$refs.listsWrapper, {
@@ -119,9 +134,35 @@
           let _this = this;
           this.listScroll.on('scroll', function (pos) {
 						let _y = Math.round(pos.y);
-						_this.refreshTop = _y - 26;
+						_this.refreshTop = _y;
 						if (_y > 50) {
 							_this.refreshTop = 50;
+							if (_y > 70) {
+								_this.listScroll.scrollTo(0, 70, 0);
+								loadingBl = false;
+								window.setTimeout(function () { // 为了模拟数据加载时间间隔
+									_this.loadingData();
+									_this.dataLength = _this.initLength;
+								}, 300);
+							}
+						};
+						console.log(loadingBl);
+						if (_y < 0 && loadingBl) {
+							let _adsY = Math.abs(Math.round(pos.y));
+							let _viewh = document.body.offsetHeight - 110;
+							let _boxh = _this.$refs.listTiemWrapper.offsetHeight;
+							let adsY = _boxh - _viewh + 40;
+							_this.refreshBottom = _adsY - _boxh + _viewh;
+							if (_adsY > adsY) {
+								_this.refreshBottom = 70;
+								let loadL = _this.dataLength + (_this.initLength * 2);
+								if (loadL >= _this.listsDatas.length) {
+									loadL = _this.listsDatas.length;
+								}
+								window.setTimeout(function () { // 为了模拟数据加载时间间隔
+									_this.dataLength = loadL;
+								}, 300);
+							}
 						}
 	        });
         } else {
@@ -201,7 +242,7 @@
     }
     .Refresh {
     	position: fixed;
-    	top: -26px;
+    	top: -30px;
     	left: 50%;
     	margin-left: -14px;
     	width: 28px;
@@ -210,6 +251,33 @@
     	background-repeat: no-repeat;
     	background-position: center;
     	background-size: 25px 27px;
+    }
+    .onloading {
+    	position: fixed;
+    	bottom: -30px;
+    	left: 50%;
+    	margin-left: -14px;
+    	width: 28px;
+    	height: 28px;
+    	background-image: url(/static/images/Refresh.gif);
+    	background-repeat: no-repeat;
+    	background-position: center;
+    	background-size: 25px 27px;
+    	&.loaded {
+    		background-image: none;
+    		.desc {
+    			display: block;
+    			position: absolute;
+    			left: 50%;
+    			top: 0;
+    			width: 200px;
+    			margin-left: -100px;
+    			text-align: center;
+    			font-size: 10px;
+    			line-height: 28px;
+    			color: #ececec;
+    		}
+    	}
     }
     .lists-content {
     	position: absolute;

@@ -1,5 +1,5 @@
 <template>
-	<div class="lists-wrapper">
+	<div class="lists-wrapper" :listData="listData">
 		<Vtitle :topTitle="titleData"></Vtitle>
 		<div class="Refresh" :style="{top: refreshTop + 'px'}"></div>
 		<div class="onloading" :class="{'loaded': dataLength === listsDatas.length}" :style="{bottom: refreshBottom + 'px'}"><span class="desc" v-if="dataLength === listsDatas.length">已经没有更多！！！</span></div>
@@ -7,7 +7,7 @@
 			<div class="lists-tiem-wrapper" ref="listTiemWrapper">
 				<h3 class="ensure"><span class="desc">网贷存管通，看得见的保障</span></h3>
 				<ul class="lists-tiem-list">
-					<li class="lists-tiem border-1px" v-for="(item, index) in listData" ref="countWrapper">
+					<li class="lists-tiem border-1px" v-for="(item, index) in viewDatas" ref="countWrapper">
 						<h3 class="name">{{item.name}}</h3>
 						<div class="list-tiem-info">
 							<div class="list-tiem-bg" :class="classList[index]"></div>
@@ -76,9 +76,11 @@
 			listData () {
 				let i = 0;
 				let _this = this;
+				let emitM = 0;
 				if (this.dataLength <= this.listsDatas.length) {
 					for (i = this.startIndex; i < this.dataLength; i++) {
 						this.viewDatas[i] = this.listsDatas[i];
+						emitM++;
 						(function(i) {
 							_this.$nextTick(function () {
 								if (_this.listsDatas[i].schedule !== 0) {
@@ -90,6 +92,7 @@
 				} else {
 					for (i = this.startIndex; i < this.listsDatas.length; i++) {
 						this.viewDatas[i] = this.listsDatas[i];
+						emitM++;
 						(function(i) {
 							_this.$nextTick(function () {
 								if (_this.listsDatas[i].schedule !== 0) {
@@ -100,11 +103,11 @@
 					};
 				}
 				loadingBl = true;
+				this.refreshBottom = -30;
 				_this.$nextTick(function () {
 					_this._initScroll();
-					_this.refreshBottom = -30;
 				});
-				return this.viewDatas;
+				return emitM++;
 			}
 		},
 		methods: {
@@ -142,12 +145,13 @@
 							if (_y > 70 && loadingBl) {
 								_this.listScroll.scrollTo(0, 70, 0);
 								loadingBl = false;
-								// window.setTimeout(function () { // 为了模拟数据加载时间间隔
-								// 	_this.loadingData();
-								// 	_this.startIndex = 0;
-								// 	_this.dataLength = _this.initLength;
-								// }, 300);
-								window.location.reload(true);
+								window.setTimeout(function () { // 为了模拟数据加载时间间隔
+									_this.viewDatas = [];
+									_this.loadingData();
+									_this.startIndex = 0;
+									_this.dataLength = _this.initLength;
+								}, 300);
+								// window.location.reload(true);
 							}
 						};
 						// 上拉加载
@@ -155,22 +159,21 @@
 						let _viewh = document.body.offsetHeight - 110;
 						let _boxh = _this.$refs.listTiemWrapper.offsetHeight;
 						let adsY = _boxh - _viewh + 40;
+						_this.refreshBottom = _adsY - _boxh + _viewh;
 						if (_y < 0 && loadingBl) {
-							_this.refreshBottom = _adsY - _boxh + _viewh;
 							if (_adsY > adsY) {
-								_this.refreshBottom = 70;
-								let loadL = _this.dataLength + (_this.initLength * 2);
+								let loadL = _this.dataLength - 0 + 2;
 								if (loadL >= _this.listsDatas.length) {
 									loadL = _this.listsDatas.length;
 								}
 								loadingBl = false;
+								_this.refreshBottom = -30;
 								window.setTimeout(function () { // 为了模拟数据加载时间间隔
 									_this.startIndex = _this.dataLength;
 									_this.dataLength = loadL;
+									loadingBl = true;
 								}, 300);
 							}
-						} else {
-							_this.refreshBottom = _adsY - _boxh + _viewh;
 						}
 	        });
         } else {

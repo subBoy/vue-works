@@ -7,6 +7,7 @@ import details from 'components/details/details';
 import list from 'components/list/list';
 import user from 'components/user/user';
 import index from 'components/index/index';
+import input from 'components/input/app';
 
 Vue.use(VueRouter);
 
@@ -15,7 +16,8 @@ const routes = [
 	{path: '/index', component: index},
 	{path: '/detail', component: details},
 	{path: '/list', component: list},
-	{path: '/user', component: user}
+	{path: '/user', component: user},
+	{path: '/input', component: input}
 ];
 
 const router = new VueRouter({

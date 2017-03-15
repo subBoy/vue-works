@@ -9,6 +9,7 @@
 		<keep-alive>
 			<Vfoot></Vfoot>
 		</keep-alive>
+		<SubScribe></SubScribe>
 	</div>
 </template>
 
@@ -16,6 +17,7 @@
 	import Guide from 'components/guide/guide';
 	import Vindex from 'components/index/index';
 	import Vfoot from 'components/footer/footer';
+	import SubScribe from 'components/subScribe/subScribe';
 	import {saveToLocal} from 'common/js/store';
 	import {urlParse} from 'common/js/util';
 	import axios from 'axios';
@@ -61,7 +63,8 @@
 		components: {
 			Guide,
 			Vindex,
-			Vfoot
+			Vfoot,
+			SubScribe
 		}
 	};
 </script>

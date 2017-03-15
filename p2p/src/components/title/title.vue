@@ -1,6 +1,7 @@
 <template>
 	<div class="title-wrapper" :class="className">
 		<span class="history-btn" @click="goHistory()"></span>{{topTitle.name}}
+		<slot name="detailLink"></slot>
 	</div>
 </template>
 
@@ -41,15 +42,26 @@
 		}
 		.history-btn {
 			display: block;
-			width: 36px;
-			height: 46px;
 			position: absolute;
 			left: 0;
 			top: 0;
+			width: 36px;
+			height: 46px;
 			background-image: url(/static/images/goBack.png);
 			background-repeat: no-repeat;
 			background-size: 16px;
 			background-position: center;
+		}
+		.detail-link {
+			display: block;
+			position: absolute;
+			right: 0;
+			top: 0;
+			line-height: 46px;
+			width: 38px;
+			height: 46px;
+			text-align: center;
+			font-size: 9px;
 		}
 	}
 </style>

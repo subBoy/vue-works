@@ -85,7 +85,7 @@
 			window.app = this;
 			this.$nextTick(() => {
 				this.input = document.querySelector('input#text');
-				this.input.focus();
+				// this.input.focus();
 				// this.visible = true;
 			});
 		}
@@ -120,10 +120,7 @@
 		width: 100%;
 		max-width: 1000px;
 		margin: 0 auto;
-		padding: 1em;
 		background-color: #EEE;
-		box-shadow: 0px -3px 10px rgba(black, 0.3);
-		border-radius: 10px;
 		z-index: 99999;
 	}
 	fieldset {

@@ -1,5 +1,5 @@
 <template>
-	<div class="latest" ref="appA">
+	<div class="latest">
 		<h3 class="name">{{latest.name}}</h3>
 		<div class="latest-info">
 			<canvas id="canvas" width="1800" height="1800">
@@ -12,10 +12,7 @@
 					<span class="Quota latest-info-item">融资额<em class="styl">{{latest.Quota}}</em>万元</span>
 					<span class="term latest-info-item">期限<em class="styl">{{latest.term}}</em>个月</span>
 				</p>
-				<router-link to="/detail" tag="div"><a class="gotoDbtn">立即购买</a></router-link>
-				<keep-alive>
-		      <router-view :projectId="latest.id"></router-view>
-		    </keep-alive>
+				<div><a class="gotoDbtn">立即购买</a></div>
 			</div>
 		</div>
 	</div>

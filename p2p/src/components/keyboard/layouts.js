@@ -1,38 +1,38 @@
 module.exports = {
 	'normal': {
 		_meta: {
-			'tab': {key: '\t', text: 'Tab', width: 60, classes: 'control'},
-			'shiftl': {keySet: 'shifted', text: 'Shift', width: 100, classes: 'control'},
-			'shiftr': {keySet: 'shifted', text: 'Shift', width: 100, classes: 'control'},
-			'caps': {keySet: 'capsed', text: 'Caps lock', width: 80, classes: 'control'},
-			'space': {key: ' ', text: 'Space', width: 180},
-			'enter': {key: '\r\n', text: 'Enter', width: 80, classes: 'control'},
-			'backspace': {func: 'backspace', classes: 'control backspace', width: 65},
+			'tab': {key: '\t', text: 'Tab', width: 1, classes: 'control'},
+			'shift': {keySet: 'shifted', text: 'Shift', width: 2, classes: 'control'},
+			'shiftr': {keySet: 'shifted', text: 'Shift', width: 1, classes: 'control'},
+			'caps': {keySet: 'capsed', text: 'Caps lock', width: 1, classes: 'control'},
+			'space': {key: ' ', text: 'Space', width: 2},
+			'enter': {key: '\r\n', text: 'Enter', width: 2, classes: 'control'},
+			'backspace': {func: 'backspace', classes: 'control backspace', width: 1},
 			'accept': {func: 'accept', text: 'Close', classes: 'control featured'},
 			'next': {func: 'next', text: 'Next', classes: 'control featured'}
 		},
 
 		default: [
-			'` 1 2 3 4 5 6 7 8 9 0 - = {backspace}',
-			'{tab} q w e r t y u i o p [ ] \\',
-			'{caps} a s d f g h j k l ; \' {enter}',
-			'{shiftl} z x c v b n m , . / {shiftr}',
-			'{next} {space} {accept}'
+			'` 1 2 3 4 5 6 7 8 9 0 - =',
+			'q w e r t y u i o p [ ] \\',
+			'a s d f g h j k l ; \' {enter}',
+			'{shift} z x c v b n m , . /',
+			'{space} {backspace} {next}'
 		],
 		shifted: [
-			'~ ! @ # $ % ^ & * ( ) _ + {backspace}',
-			'{tab} Q W E R T Y U I O P { } |',
-			'{caps} A S D F G H J K L : \' {enter}',
-			'{shiftl} Z X C V B N M < > ? {shiftr}',
-			'{next} {space} {accept}'
+			'~ ! @ # $ % ^ & * ( ) _ +',
+			'Q W E R T Y U I O P { } |', // {tab}
+			'A S D F G H J K L : \' {enter}', // {caps}
+			'{shift} Z X C V B N M < > ?', // {shiftr}
+			'{space} {backspace} {next}'
 		],
 
 		capsed: [
-			'` 1 2 3 4 5 6 7 8 9 0 - = {backspace}',
-			'{tab} Q W E R T Y U I O P [ ] \\',
-			'{caps} A S D F G H J K L ; \' {enter}',
-			'{shiftl} Z X C V B N M , . / {shiftr}',
-			'{next} {space} {accept}'
+			'` 1 2 3 4 5 6 7 8 9 0 - =',
+			'Q W E R T Y U I O P [ ] \\',
+			'A S D F G H J K L ; \' {enter}',
+			'{shift} Z X C V B N M , . / {backspace}',
+			'{space} {backspace} {next}'
 		]
 	},
 
@@ -43,32 +43,32 @@ module.exports = {
 			'alpha': {keySet: 'default', text: 'Abc', classes: 'control'},
 			'shift': {keySet: 'shifted', text: 'ABC', classes: 'control'},
 			'numbers': {keySet: 'numbers', text: '123', classes: 'control'},
-			'space': {key: ' ', text: 'Space', width: 200},
+			'space': {key: ' ', text: 'Space', width: 2},
 			'backspace': {func: 'backspace', classes: 'control'},
 			'accept': {func: 'accept', text: 'Close', classes: 'control featured'},
 			'next': {func: 'next', text: 'Next', classes: 'featured'},
-			'zero': {key: '0', width: 130}
+			'zero': {key: '0'}
 		},
 
 		default: [
 			'q w e r t y u i o p',
 			' a s d f g h j k l ',
 			'{shift} z x c v b n m {backspace}',
-			'{numbers} , {space} . {next} {accept}'
+			'{numbers} , {space} . {next}' // {accept}
 		],
 
 		shifted: [
 			'Q W E R T Y U I O P',
 			' A S D F G H J K L ',
 			'{default} Z X C V B N M ',
-			'{numbers} _ {space} {backspace} {next} {accept}'
+			'{numbers} _ {space} {backspace} {next}'
 		],
 
 		numbers: [
 			'1 2 3',
 			'4 5 6',
 			'7 8 9',
-			'  {alpha} . {zero} {backspace} {next} {accept}'
+			'  {alpha} . {zero} {backspace} {next}'
 		]
 	},
 
@@ -78,14 +78,14 @@ module.exports = {
 			'backspace': {func: 'backspace', classes: 'control'},
 			'accept': {func: 'accept', text: 'Close', classes: 'control featured'},
 			'next': {func: 'next', text: 'Next', classes: 'control featured'},
-			'zero': {key: '0', width: 130}
+			'zero': {key: '0'}
 		},
 
 		default: [
 			'1 2 3',
 			'4 5 6',
 			'7 8 9',
-			'_ - . {zero} {backspace} {next} {accept}'
+			'. {zero} {backspace} {next}'
 		]
 	}
 };

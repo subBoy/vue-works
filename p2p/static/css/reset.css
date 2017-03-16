@@ -57,11 +57,15 @@ a {
 	text-decoration: none;
 	-webkit-backface-visibility: hidden;
 }
-
 li {
 	list-style: none;
 }
-
+input, button, textarea {
+	background: transparent!important;
+	outline: none;
+	padding: 0;
+	margin: 0;
+}
 ::-webkit-scrollbar {
 	width: 5px;
 	height: 5px;

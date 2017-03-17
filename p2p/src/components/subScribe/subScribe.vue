@@ -1,74 +1,78 @@
 <template>
-	<div class="subScribe-wrapper">
-		<Vtitle :topTitle="titleData">
-			<span slot="detailLink" class="detail-link">详情</span>
-		</Vtitle>
-		<div class="subScribe-bg">
-			<div class="sub-latest">
-				<div class="latest-info">
-					<canvas id="sub-canvas" width="1800" height="1800">
-					  <p>抱歉，您的浏览器不支持canvas</p>
-					</canvas>
-					<div class="latest-info-wrapper">
-						<p class="return-txt"><span class="num" v-text="rateVal"></span><span class="unit">%</span></p>
-						<p class="desc">预期年化收益率</p>
-						<p class="latest-info-list">
-							<span><span class="Quota latest-info-item">融资额<em class="styl">{{latest.Quota}}</em>万元</span></span>
-							<span class="bg-icon"><span class="term latest-info-item">期限<em class="styl">{{latest.term}}</em>个月</span></span>
-						</p>
+	<transition name="slideLeft">
+		<div class="subScribe-wrapper" ref="subScribeWrapper" v-show="subScribeStatus" :proId="projectID">
+			<div>
+				<Vtitle :topTitle="titleData" :setOnck="setOnck" @setSubFalse="setSubFalse">
+					<span slot="detailLink" class="detail-link">详情</span>
+				</Vtitle>
+				<div class="subScribe-bg">
+					<div class="sub-latest">
+						<div class="latest-info">
+							<canvas id="sub-canvas" width="1800" height="1800">
+							  <p>抱歉，您的浏览器不支持canvas</p>
+							</canvas>
+							<div class="latest-info-wrapper">
+								<p class="return-txt"><span class="num" v-text="rateVal"></span><span class="unit">%</span></p>
+								<p class="desc">预期年化收益率</p>
+								<p class="latest-info-list">
+									<span><span class="Quota latest-info-item">融资额<em class="styl">{{projectData.Quota}}</em>万元</span></span>
+									<span class="bg-icon"><span class="term latest-info-item">期限<em class="styl">{{projectData.term}}</em>个月</span></span>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="subScribe-info-wrapper">
+						<ul class="subScribe-info border-1px">
+							<li class="info-item">
+								<span class="item item-desc">可认购余额</span>
+								<span class="item item-data">{{projectData.Balance}}元</span>
+							</li>
+							<li class="info-item">
+								<span class="item item-desc">账户余额</span>
+								<span class="item item-data">{{}}元</span>
+							</li>
+							<li class="info-item">
+								<span class="item item-desc">理财工号</span>
+								<span class="item item-data"><input class="inp-box" type="text" placeholder="输入工号"></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="subScribe-operating border-1px">
+					<p class="desc">认购金额</p>
+					<div class="operating-wrapper">
+						<span class="less btns"><button class="btn not-ck">-</button></span>
+						<span class="operat-input"><input class="ipt" type="text" placeholder="请输入整数金额（≥100元）"></span>
+						<span class="add btns"><button class="btn">+</button></span>
+					</div>
+					<div class="subScribe-return">
+						<p class="return"><span class="desc">预期收益：<em class="rn-data">???</em></span><span class="recharge">立即充值</span></p>
+						<p class="voucher"><span class="desc">使用券</span><span class="operat-btn operating"><em class="operat-view"></em></span></p>
+					</div>
+				</div>
+				<div class="voucher-wrapper">
+					<ul class="voucher-list">
+						<li class="voucher-item">
+							<div class="voucher-name"><span class="sel-btn"><em class="sel-view"></em></span><span class="name">双十二红包</span></div>
+							<div class="voucher-operat">
+								<span class="desc">可使用</span>
+								<div class="operating-wrapper">
+									<span class="less btns"><button class="btn not-ck">-</button></span>
+									<span class="operat-input"><input class="ipt" type="text" value="1"></span>
+									<span class="add btns"><button class="btn">+</button></span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="subScribe-btn-wrapper border-1px">
+					<div class="subScribe-btn">
+						<button class="desc">立即购买</button>
 					</div>
 				</div>
 			</div>
-			<div class="subScribe-info-wrapper">
-				<ul class="subScribe-info border-1px">
-					<li class="info-item">
-						<span class="item item-desc">可认购余额</span>
-						<span class="item item-data">{{}}元</span>
-					</li>
-					<li class="info-item">
-						<span class="item item-desc">账户余额</span>
-						<span class="item item-data">{{}}元</span>
-					</li>
-					<li class="info-item">
-						<span class="item item-desc">理财工号</span>
-						<span class="item item-data"><input class="inp-box" type="text" placeholder="输入工号"></span>
-					</li>
-				</ul>
-			</div>
 		</div>
-		<div class="subScribe-operating border-1px">
-			<p class="desc">认购金额</p>
-			<div class="operating-wrapper">
-				<span class="less btns"><button class="btn not-ck">-</button></span>
-				<span class="operat-input"><input class="ipt" type="text" placeholder="请输入整数金额（≥100元）"></span>
-				<span class="add btns"><button class="btn">+</button></span>
-			</div>
-			<div class="subScribe-return">
-				<p class="return"><span class="desc">预期收益：<em class="rn-data">???</em></span><span class="recharge">立即充值</span></p>
-				<p class="voucher"><span class="desc">使用券</span><span class="operat-btn operating"><em class="operat-view"></em></span></p>
-			</div>
-		</div>
-		<div class="voucher-wrapper">
-			<ul class="voucher-list">
-				<li class="voucher-item">
-					<div class="voucher-name"><span class="sel-btn"><em class="sel-view"></em></span><span class="name">双十二红包</span></div>
-					<div class="voucher-operat">
-						<span class="desc">可使用</span>
-						<div class="operating-wrapper">
-							<span class="less btns"><button class="btn not-ck">-</button></span>
-							<span class="operat-input"><input class="ipt" type="text" value="1"></span>
-							<span class="add btns"><button class="btn">+</button></span>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div class="subScribe-btn-wrapper border-1px">
-			<div class="subScribe-btn">
-				<button class="desc">立即购买</button>
-			</div>
-		</div>
-	</div>
+	</transition>
 </template>
 
 <script>
@@ -85,36 +89,55 @@
 					name: '认购',
 					classNum: 0
 				},
-				latest: {
-					type: Object
-				},
-				rateVal: 0
+				rateVal: 0,
+				setOnck: true,
+				projectData: {}
 			};
 		},
-		created () {
-			let _this = this;
-			axios.get('/api/latestProject').then(function (response) {
-				response = response.data;
-				if (response.errno === ERR_OK) {
-					_this.latest = response.data;
-					toCanvas('sub-canvas', _this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, Math.PI * 1, 830, 50);
-					_this.$nextTick(() => {
-						_this.interestRate();
-					});
-				}
-			});
-		},
 		methods: {
+			getData () {
+				let _this = this;
+				axios.get('/api/projectList').then(function(response) {
+					response = response.data;
+					if (response.errno === ERR_OK) {
+						for (var i = 0; i < response.data.length; i++) {
+							if (response.data[i].id === _this.projectID) {
+								_this.projectData = response.data[i];
+								toCanvas('sub-canvas', _this.projectData.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, Math.PI * 1, 830, 50);
+								_this.$nextTick(() => {
+									_this.interestRate();
+								});
+								return;
+							}
+						};
+					}
+				});
+			},
 			interestRate () {
-				let rate = this.latest.interestRate;
-				let hike = this.latest.Hike;
+				let rate = this.projectData.interestRate;
+				let hike = this.projectData.Hike;
 				let interestRateVal = '';
 				if (hike > 0) {
-					interestRateVal = parseFloat(rate).toFixed(2) + '+' + hike;
+					interestRateVal = parseFloat(rate).toFixed(2) + '+' + parseFloat(hike).toFixed(1);
 				} else {
 					interestRateVal = parseFloat(rate).toFixed(2);
 				}
 				this.rateVal = interestRateVal;
+			},
+			setSubFalse () {
+				this.$store.commit('setFalse');
+				this.$store.commit('clearProjectID');
+			}
+		},
+		computed: {
+			subScribeStatus () {
+				return this.$store.state.subScribeStatus;
+			},
+			projectID () {
+				this.$nextTick(() => {
+					this.getData();
+				});
+				return this.$store.state.projectId;
 			}
 		},
 		components: {
@@ -134,6 +157,11 @@
 		height: 100%;
 		z-index: 10000;
 		background-color: #fff;
+		transform: translate3d(0, 0, 0);
+		transition: all 0.5s;
+    &.slideLeft-enter, &.slideLeft-leave-active{
+    	transform: translate3d(100%, 0, 0);
+    }
 		.subScribe-bg {
 			background: linear-gradient(to right,  #3dc7ff 0%, #1a78fc 100%);
 			.sub-latest {

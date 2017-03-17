@@ -27,7 +27,7 @@
 							<span class="Quota latest-info-item"><span class="term-wrapper">融资额：<em class="styl">{{item.Quota}}</em>万元</span></span>
 							<span class="term latest-info-item"><span class="term-wrapper">期限：<em class="styl">{{item.term}}</em>个月</span></span>
 						</p>
-						<div class="details-btn" :class="classList[index]" :startTime="item.startTime" :scheDule="item.schedule"></div>
+						<div class="details-btn" :class="classList[index]" :startTime="item.startTime" :scheDule="item.schedule" @click="subShow(item.id)"></div>
 					</li>
 				</ul>
 			</div>
@@ -226,6 +226,10 @@
 			},
 			padLeftZero (str) {
 			  return ('00' + str).substr(str.length);
+			},
+			subShow (id) {
+				this.$store.commit('setProjectID', id);
+				this.$store.commit('setTrue');
 			}
 		},
 		components: {

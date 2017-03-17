@@ -12,7 +12,7 @@
 					<span class="Quota latest-info-item">融资额<em class="styl">{{latest.Quota}}</em>万元</span>
 					<span class="term latest-info-item">期限<em class="styl">{{latest.term}}</em>个月</span>
 				</p>
-				<div><a class="gotoDbtn">立即购买</a></div>
+				<div><a class="gotoDbtn" @click="lateSub(latest.id)">立即购买</a></div>
 			</div>
 		</div>
 	</div>
@@ -39,7 +39,7 @@
 				response = response.data;
 				if (response.errno === ERR_OK) {
 					_this.latest = response.data;
-					toCanvas('canvas', _this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, Math.PI * 1, 830, 80);
+					toCanvas('canvas', _this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, Math.PI * 1, 830, 50);
 					_this.$nextTick(() => {
 						_this.interestRate();
 					});
@@ -57,6 +57,10 @@
 					interestRateVal = parseFloat(rate).toFixed(2);
 				}
 				this.rateVal = interestRateVal;
+			},
+			lateSub (id) {
+				this.$store.commit('setProjectID', id);
+				this.$store.commit('setTrue');
 			}
 		}
 	};

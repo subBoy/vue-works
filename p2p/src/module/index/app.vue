@@ -9,7 +9,8 @@
 		<keep-alive>
 			<Vfoot></Vfoot>
 		</keep-alive>
-		<SubScribe></SubScribe>
+		<SubScribe ref="SubScribe"></SubScribe>
+		<Confirm></Confirm>
 	</div>
 </template>
 
@@ -18,6 +19,7 @@
 	import Vindex from 'components/index/index';
 	import Vfoot from 'components/footer/footer';
 	import SubScribe from 'components/subScribe/subScribe';
+	import Confirm from 'components/confirm/confirm';
 	import {saveToLocal} from 'common/js/store';
 	import {urlParse} from 'common/js/util';
 	import axios from 'axios';
@@ -33,7 +35,8 @@
             return queryParam.id;
           })()
 				},
-				transitionName: ''
+				transitionName: '',
+				subScribeStatus: false
 			};
 		},
 		created () {
@@ -64,7 +67,8 @@
 			Guide,
 			Vindex,
 			Vfoot,
-			SubScribe
+			SubScribe,
+			Confirm
 		}
 	};
 </script>

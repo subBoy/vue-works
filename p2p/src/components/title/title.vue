@@ -10,11 +10,19 @@
 		props: {
 			topTitle: {
 				type: Object
+			},
+			setOnck: {
+				type: Boolean,
+				default: false
 			}
 		},
 		methods: {
 			goHistory () {
-        this.$router.go(-1);
+				if (this.setOnck) {
+					this.$emit('setSubFalse');
+				} else {
+					this.$router.go(-1);
+				}
 			}
 		},
 		computed: {

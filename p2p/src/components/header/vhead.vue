@@ -98,7 +98,7 @@
 			.v-logo {
 				height: 16px;
 				float: left;
-				padding: 10px;
+				margin: 10px;
 			}
 			.v-login {
 				float: right;

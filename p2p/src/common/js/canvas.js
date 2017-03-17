@@ -58,6 +58,9 @@ export function toCanvas (id, progress, circleStartAngle, circleEndAngle, circle
 		// 圆弧两端的样式
 		ctx.lineCap = 'round';
 
+		if (endAngle === 0) {
+			r = 0;
+		}
 		// 圆弧
 		ctx.arc(cx, cy, r, startAngle, startAngle + endAngle / 100 * circleAngle, false);
 		ctx.stroke();

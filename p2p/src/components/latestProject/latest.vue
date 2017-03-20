@@ -21,6 +21,7 @@
 <script>
 	import axios from 'axios';
 	import {toCanvas} from 'common/js/canvas';
+	import {loadFromLocal} from 'common/js/store';
 
 	const ERR_OK = 0;
 
@@ -59,8 +60,20 @@
 				this.rateVal = interestRateVal;
 			},
 			lateSub (id) {
-				this.$store.commit('setProjectID', id);
-				this.$store.commit('setTrue');
+				let userId = loadFromLocal('userId');
+				if (userId === undefined) {
+					this.$store.commit('setConfirmTrue', {
+						Title: '您还没有登录！此操作需登录后才能执行！是否立即去登录？',
+						cancelText: '否',
+						okText: '是',
+						cancelOperate: 0,
+						OkOperate: 'signOn'
+
+					});
+				} else {
+					this.$store.commit('setProjectID', id);
+					this.$store.commit('setTrue');
+				}
 			}
 		}
 	};

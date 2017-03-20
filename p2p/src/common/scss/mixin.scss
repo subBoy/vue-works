@@ -1,6 +1,9 @@
 @mixin border-1px($color) {
 	border-top: 1px solid $color;
 }
+@mixin border-1px-lr($color) {
+	border-left: 1px solid $color;
+}
 .border-1px {
 	position: relative;
 	&:after {
@@ -13,7 +16,18 @@
 		content: '';
 	}
 }
-
+.border-1px-lr {
+	position: relative;
+	&:after {
+		display: block;
+		position: absolute;
+		//left: 0;
+		top: 0;
+		height: 100%;
+		// @include border-1px-lr($color: #ececec);
+		content: '';
+	}
+}
 .clearfix{
 	display: inline-block;
 	&:after {
@@ -33,6 +47,12 @@
 			transform: scaleY(0.7);
 		}
 	}
+	.border-1px-lr {
+		&::after {
+			-webkit-transform: scaleX(0.7);
+			transform: scaleX(0.7);
+		}
+	}
 }
 
 @media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2) {
@@ -40,6 +60,12 @@
 		&::after {
 			-webkit-transform: scaleY(0.5);
 			transform: scaleY(0.5);
+		}
+	}
+	.border-1px-lr {
+		&::after {
+			-webkit-transform: scaleX(0.5);
+			transform: scaleX(0.5);
 		}
 	}
 }

@@ -9,6 +9,7 @@ import list from 'components/list/list';
 import user from 'components/user/user';
 import index from 'components/index/index';
 import input from 'components/input/app';
+import signOn from 'components/signOn/signOn';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
@@ -19,7 +20,8 @@ const routes = [
 	{path: '/detail', component: details},
 	{path: '/list', component: list},
 	{path: '/user', component: user},
-	{path: '/input', component: input}
+	{path: '/input', component: input},
+	{path: '/signOn', component: signOn}
 ];
 
 const router = new VueRouter({
@@ -30,7 +32,14 @@ const router = new VueRouter({
 const store = new Vuex.Store({
 	state: {
 		subScribeStatus: false,
-		projectId: ''
+		projectId: '',
+		confirmContent: {
+			Status: false,
+			Title: '',
+			cancelText: '',
+			okText: ''
+		},
+		userId: ''
 	},
 	mutations: {
 		setTrue (state) {
@@ -44,6 +53,32 @@ const store = new Vuex.Store({
 		},
 		clearProjectID (state) {
 			state.projectId = '';
+		},
+		setConfirmTrue (state, content) {
+			state.confirmContent = {
+				Status: true,
+				Title: content.Title,
+				cancelText: content.cancelText,
+				okText: content.okText,
+				cancelOperate: content.cancelOperate, // 如果值为0；该操作只关闭当前弹窗；并留在当前页，如果值为路径则跳转到当前路径
+				okOperate: content.OkOperate // 如果值为0；该操作只关闭当前弹窗；并留在当前页，如果值为路径则跳转到当前路径
+			};
+		},
+		setConfirmFalse (state) {
+			state.confirmContent = {
+				Status: false,
+				Title: '',
+				cancelText: '',
+				okText: '',
+				cancelOperate: '',
+				okOperate: ''
+			};
+		},
+		setUserId (state, userId) {
+			state.userId = userId;
+		},
+		clearUserId (state, userId) {
+			state.userId = '';
 		}
 	}
 });

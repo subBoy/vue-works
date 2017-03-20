@@ -1,5 +1,5 @@
 <template>
-	<Sign>
+	<Sign :signFooter="signFooter">
 		<div class="signOn-wrapper" slot="signContent">
 			<div class="signOn">
 				<div class="select-type">
@@ -10,39 +10,57 @@
 				</div>
 				<div class="signOn-content">
 					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px"><input class="input-text" type="tel" placeholder="请输入手机号码"></div>
+						<div class="signOn-input border-1px"><input class="input-text" type="tel" placeholder="请输入手机号码" @focus="show" data-layout="numeric" readonly="readonly"></div>
 					</div>
 					<div class="signOn-ct-item">
 						<div class="signOn-input border-1px">
-							<input v-if="passwordStutas" v-model="passwordVal" class="input-text" type="text" placeholder="请输入登录密码(8~16位字符串)">
-							<input v-if="!passwordStutas" v-model="passwordVal" class="input-text" type="password" placeholder="请输入登录密码(8~16位字符串)">
+							<input v-if="passwordStutas" v-model="passwordVal" class="input-text" type="text" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
+							<input v-if="!passwordStutas" v-model="passwordVal" class="input-text" type="password" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
 						</div>
 						<div class="sh-password-btn" :class="{'sBtn': passwordStutas}" @click="shPassWord"></div>
 					</div>
 					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px"><input class="input-text" type="tel" placeholder="请输入验证码"></div>
+						<div class="signOn-input border-1px"><input class="input-text" type="tel" placeholder="请输入验证码" @focus="show" data-layout="numeric" readonly="readonly"></div>
 						<div class="getCode-btn">获取验证码</div>
 					</div>
 					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px"><input class="input-text" type="text" placeholder="邀请人(选填)"></div>
+						<div class="signOn-input border-1px"><input class="input-text" type="text" placeholder="邀请人(选填)" @focus="show" data-layout="compact" readonly="readonly"></div>
 					</div>
 				</div>
 				<div class="signOn-submit-btn">同意协议并注册</div>
 				<p class="potocol"><span class="icon" :class="{'agree': agreeStatus}" @click="potocolStatus"></span>《有人贷网站服务协议》</p>
 			</div>
+			<vue-touch-keyboard id="keyboard" v-if="visible" :layout="layout" :cancel="hide" :accept="accept" :input="input" :next="next" :options="options"></vue-touch-keyboard>
 		</div>
 	</Sign>
 </template>
 
 <script>
+	import Vue from 'vue';
+	import VueTouchKeyboard from 'components/keyboard';
 	import Sign from 'components/sign/sign';
+
+	Vue.use(VueTouchKeyboard);
+
 	export default {
 		data () {
 			return {
 				selectType: 0,
 				passwordStutas: false,
 				passwordVal: '',
-				agreeStatus: true
+				agreeStatus: true,
+				signFooter: {
+					descTxt: '已有账号？立即登录',
+					clickTpye: 0
+				},
+				visible: false,
+				allLayouts: VueTouchKeyboard.layouts,
+				layout: VueTouchKeyboard.layouts['compact'],
+				// layout: 'mini',
+				input: null,
+				options: {
+					useKbEvents: true
+				}
 			};
 		},
 		methods: {
@@ -57,7 +75,47 @@
 			},
 			potocolStatus () {
 				this.agreeStatus = !this.agreeStatus;
+			},
+			hide() {
+				this.visible = false;
+			},
+			accept(text) {
+				this.hide();
+			},
+			next() {
+				let inputs = document.querySelectorAll('input');
+				let found = false;
+				[].forEach.call(inputs, (item, i) => {
+					if (!found && item === this.input && i < inputs.length - 1) {
+						found = true;
+						this.$nextTick(() => {
+							inputs[i + 1].focus();
+						});
+					}
+				});
+				if (!found) {
+					this.input.blur();
+					this.hide();
+				}
+			},
+			show(e) {
+				this.input = e.target;
+				this.layout = e.target.dataset.layout; // html5自定义data-前缀就被称为data属性(data-layout);
+				if (!this.visible) {
+					this.visible = true;
+				}
+				this.$nextTick(() => {
+					this.input.scrollIntoView(); // 滚动浏览器窗口或容器元素,以便在当前视窗的可见范围看见当前元素。
+				});
 			}
+		},
+		mounted() {
+			window.app = this;
+			this.$nextTick(() => {
+				this.input = document.querySelector('input#text');
+				// this.input.focus();
+				// this.visible = true;
+			});
 		},
 		components: {
 			Sign
@@ -69,7 +127,7 @@
 	@import '../../common/scss/mixin.scss';
 
 	.signOn-wrapper {
-		padding-top: 20px;
+		padding: 20px 0 75px 0;
 		.signOn {
 			padding: 0 25px;
 			.select-type {
@@ -122,6 +180,11 @@
 							}
 							&::-webkit-input-placeholder {
 							  color: #fff;
+							}
+							&:focus {
+								border-color: #66afe9;
+								outline: 0;
+								box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 							}
 						}
 					}

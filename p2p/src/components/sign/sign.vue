@@ -1,16 +1,27 @@
 <template>
 	<div class="sign-wrapper">
 		<Vtitle :topTitle="titleData"></Vtitle>
-		<div class="sign-logo"></div>
-		<slot name="signContent"></slot>
-		<div class="sign-footer"><div class="txt-desc">已有账号？立即登录</div></div>
+		<div class="sign-ct-box" ref="signWrapper">
+			<div class="sign-ct-scroll">
+				<div class="sign-logo"></div>
+				<slot name="signContent"></slot>
+				<div class="sign-footer"><div class="txt-desc">{{signFooter.descTxt}}</div></div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
+	import BScroll from 'better-scroll';
 	import Vtitle from 'components/title/title';
 
 	export default {
+		props: {
+			signFooter: {
+				type: Object,
+				default: {}
+			}
+		},
 		data () {
 			return {
 				titleData: {
@@ -18,6 +29,22 @@
 					classNum: 1
 				}
 			};
+		},
+		mounted () {
+			this.$nextTick(() => {
+				this._initScroll();
+			});
+		},
+		methods: {
+			_initScroll (event) {
+        if (!this.signScroll) {
+          this.signScroll = new BScroll(this.$refs.signWrapper, {
+            click: true
+          });
+        } else {
+          this.signScroll.refresh();
+        }
+      }
 		},
 		components: {
 			Vtitle
@@ -32,7 +59,6 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		min-height: 560px;
 		overflow: hidden;
 		z-index: 10000;
 		background-image: url(/static/images/login-bg.jpg);
@@ -44,8 +70,16 @@
 		&.slideRight-enter, &.slideRight-leace-active {
 			transform: translate3d(100%, 0, 0);
 		}
+		.sign-ct-box {
+			position: absolute;
+			top: 46px;
+			bottom: 0;
+			width: 100%;
+			.sign-ct-scroll {
+				min-height: 100%;
+			}
+		}
 		.sign-logo {
-			margin-top: 46px;
 			width: 100%;
 			height: 120px;
 			background-image: url(/static/images/sign-logo.png);
@@ -54,7 +88,7 @@
 			background-size: 85px 68px;
 		}
 		.sign-footer {
-			position: fixed;
+			position: absolute;
 			left: 0;
 			bottom: 15px;
 			width: 100%;

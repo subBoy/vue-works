@@ -1,13 +1,14 @@
 <template>
 	<div class="sign-wrapper">
 		<Vtitle :topTitle="titleData"></Vtitle>
-		<div class="sign-ct-box" ref="signWrapper">
+		<div class="sign-ct-box" ref="signWrapper" :style="{'bottom': signBottom + 'px'}">
 			<div class="sign-ct-scroll">
 				<div class="sign-logo"></div>
 				<slot name="signContent"></slot>
 				<div class="sign-footer"><div class="txt-desc">{{signFooter.descTxt}}</div></div>
 			</div>
 		</div>
+		<slot name="vue-keyboard"></slot>
 	</div>
 </template>
 
@@ -20,7 +21,12 @@
 			signFooter: {
 				type: Object,
 				default: {}
-			}
+			},
+			signBottom: {
+				type: Number,
+				default: 0
+			},
+			input: HTMLInputElement
 		},
 		data () {
 			return {
@@ -29,6 +35,14 @@
 					classNum: 1
 				}
 			};
+		},
+		watch: {
+			'signBottom': function() {
+				this.$nextTick(() => {
+					this._initScroll();
+					this.intoView();
+				});
+			}
 		},
 		mounted () {
 			this.$nextTick(() => {
@@ -44,6 +58,9 @@
         } else {
           this.signScroll.refresh();
         }
+      },
+      intoView () {
+				this.signScroll.scrollToElement(this.input, 300);
       }
 		},
 		components: {
@@ -102,6 +119,16 @@
 				text-align: center;
 				font-size: 11px;
 			}
+		}
+		#keyboard {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: 100%;
+			margin: 0 auto;
+			background-color: #EEE;
+			z-index: 99999;
 		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<Sign :signFooter="signFooter">
+	<Sign ref="signBox" :signFooter="signFooter" :signBottom="signBottom" :input="input">
 		<div class="signOn-wrapper" slot="signContent">
 			<div class="signOn">
 				<div class="select-type">
@@ -8,14 +8,14 @@
 						<li class="select-item" :class="{'selected': selectType === 1}" @click="selectedJk">成为借款用户</li>
 					</ul>
 				</div>
-				<div class="signOn-content">
+				<div class="signOn-content" ref="signOnContent">
 					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px"><input class="input-text" type="tel" placeholder="请输入手机号码" @focus="show" data-layout="numeric" readonly="readonly"></div>
+						<div class="signOn-input border-1px"><input ref="phoneNumber" class="input-text" type="tel" placeholder="请输入手机号码" @focus="show" data-layout="numeric" readonly="readonly"></div>
 					</div>
 					<div class="signOn-ct-item">
 						<div class="signOn-input border-1px">
-							<input v-if="passwordStutas" v-model="passwordVal" class="input-text" type="text" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
-							<input v-if="!passwordStutas" v-model="passwordVal" class="input-text" type="password" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
+							<input v-if="passwordStutas" v-model="passwordVal" ref="passwordWrapper" class="input-text" type="text" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
+							<input v-if="!passwordStutas" v-model="passwordVal" ref="passwordWrapper" class="input-text" type="password" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
 						</div>
 						<div class="sh-password-btn" :class="{'sBtn': passwordStutas}" @click="shPassWord"></div>
 					</div>
@@ -30,8 +30,8 @@
 				<div class="signOn-submit-btn">同意协议并注册</div>
 				<p class="potocol"><span class="icon" :class="{'agree': agreeStatus}" @click="potocolStatus"></span>《有人贷网站服务协议》</p>
 			</div>
-			<vue-touch-keyboard id="keyboard" v-if="visible" :layout="layout" :cancel="hide" :accept="accept" :input="input" :next="next" :options="options"></vue-touch-keyboard>
 		</div>
+		<vue-touch-keyboard slot="vue-keyboard" id="keyboard" ref="vueKeyboard" v-if="visible" :layout="layout" :cancel="hide" :accept="accept" :input="input" :next="next" :options="options"></vue-touch-keyboard>
 	</Sign>
 </template>
 
@@ -60,7 +60,8 @@
 				input: null,
 				options: {
 					useKbEvents: true
-				}
+				},
+				signBottom: 0
 			};
 		},
 		methods: {
@@ -71,19 +72,22 @@
 				this.selectType = 1;
 			},
 			shPassWord () {
+				this.passwordVal = this.$refs.passwordWrapper.value;
 				this.passwordStutas = !this.passwordStutas;
 			},
 			potocolStatus () {
 				this.agreeStatus = !this.agreeStatus;
 			},
-			hide() {
+			hide () {
 				this.visible = false;
 			},
-			accept(text) {
+			accept (text) {
 				this.hide();
 			},
-			next() {
-				let inputs = document.querySelectorAll('input');
+			next () {
+				this.verify_phone();
+				this.passwordVal = this.$refs.passwordWrapper.value;
+				let inputs = this.$refs.signOnContent.querySelectorAll('input');
 				let found = false;
 				[].forEach.call(inputs, (item, i) => {
 					if (!found && item === this.input && i < inputs.length - 1) {
@@ -96,26 +100,27 @@
 				if (!found) {
 					this.input.blur();
 					this.hide();
+					this.signBottom = 0;
 				}
 			},
-			show(e) {
+			show (e) {
 				this.input = e.target;
 				this.layout = e.target.dataset.layout; // html5自定义data-前缀就被称为data属性(data-layout);
 				if (!this.visible) {
 					this.visible = true;
 				}
 				this.$nextTick(() => {
-					this.input.scrollIntoView(); // 滚动浏览器窗口或容器元素,以便在当前视窗的可见范围看见当前元素。
+					this.signBottom = this.$refs.vueKeyboard.$el.scrollHeight;
+					this.$refs.signBox.intoView();
 				});
+			},
+			verify_phone () {
+				let _val = this.$refs.phoneNumber.value;
+				if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(_val))) {
+					console.log(_val);
+					return;
+				};
 			}
-		},
-		mounted() {
-			window.app = this;
-			this.$nextTick(() => {
-				this.input = document.querySelector('input#text');
-				// this.input.focus();
-				// this.visible = true;
-			});
 		},
 		components: {
 			Sign
@@ -198,6 +203,7 @@
 						background-position: center;
 						background-size: 16px 6px;
 						background-repeat: no-repeat;
+						z-index: 10;
 						&.sBtn {
 							background-image: url(/static/images/spassword.png);
 							background-size: 15px 8px;

@@ -5,7 +5,7 @@
 			<div class="sign-ct-scroll">
 				<div class="sign-logo"></div>
 				<slot name="signContent"></slot>
-				<div class="sign-footer"><div class="txt-desc">{{signFooter.descTxt}}</div></div>
+				<div class="sign-footer" v-if="signFooter.show"><div class="txt-desc" @click="routerPath">{{signFooter.descTxt}}</div></div>
 			</div>
 		</div>
 		<slot name="vue-keyboard"></slot>
@@ -61,6 +61,9 @@
       },
       intoView () {
 				this.signScroll.scrollToElement(this.input, 300);
+      },
+      routerPath () {
+				this.$router.push(this.signFooter.routerPath);
       }
 		},
 		components: {

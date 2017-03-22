@@ -67,12 +67,12 @@
 						cancelText: '否',
 						okText: '是',
 						cancelOperate: 0,
-						OkOperate: 'signOn'
+						OkOperate: 'signIn'
 
 					});
 				} else {
 					this.$store.commit('setProjectID', id);
-					this.$store.commit('setTrue');
+					this.$store.commit('setScribeStatus', true);
 				}
 			}
 		}

@@ -1,33 +1,33 @@
 <template>
 	<Sign ref="signBox" :signFooter="signFooter" :signBottom="signBottom" :input="input">
-		<div class="signOn-wrapper" slot="signContent">
-			<div class="signOn">
+		<div class="signUp-wrapper" slot="signContent">
+			<div class="signUp">
 				<div class="select-type">
 					<ul class="select-list">
 						<li class="select-item" :class="{'selected': selectType === 0}" @click="selectedTz">成为投资用户</li>
 						<li class="select-item" :class="{'selected': selectType === 1}" @click="selectedJk">成为借款用户</li>
 					</ul>
 				</div>
-				<div class="signOn-content" ref="signOnContent">
-					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px"><input ref="phoneNumber" class="input-text" type="tel" placeholder="请输入手机号码" @focus="show" data-layout="numeric" readonly="readonly"></div>
+				<div class="signUp-content" ref="signUpContent">
+					<div class="signUp-ct-item">
+						<div class="signUp-input border-1px"><input ref="phoneNumber" class="input-text" type="tel" placeholder="请输入手机号码" @focus="show" data-layout="numeric" readonly="readonly"></div>
 					</div>
-					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px">
-							<input v-if="passwordStutas" v-model="passwordVal" ref="passwordWrapper" class="input-text" type="text" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
-							<input v-if="!passwordStutas" v-model="passwordVal" ref="passwordWrapper" class="input-text" type="password" placeholder="请输入登录密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
+					<div class="signUp-ct-item">
+						<div class="signUp-input border-1px">
+							<input v-if="passwordStutas" v-model="passwordVal" ref="passwordWrapper" class="input-text" type="text" placeholder="请输入注册密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
+							<input v-if="!passwordStutas" v-model="passwordVal" ref="passwordWrapper" class="input-text" type="password" placeholder="请输入注册密码(8~16位字符串)" @focus="show" data-layout="compact" readonly="readonly">
 						</div>
 						<div class="sh-password-btn" :class="{'sBtn': passwordStutas}" @click="shPassWord"></div>
 					</div>
-					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px"><input class="input-text" type="tel" placeholder="请输入验证码" @focus="show" data-layout="numeric" readonly="readonly"></div>
+					<div class="signUp-ct-item">
+						<div class="signUp-input border-1px"><input ref="codeNumber" class="input-text" type="tel" placeholder="请输入验证码" @focus="show" data-layout="numeric" readonly="readonly"></div>
 						<div class="getCode-btn">获取验证码</div>
 					</div>
-					<div class="signOn-ct-item">
-						<div class="signOn-input border-1px"><input class="input-text" type="text" placeholder="邀请人(选填)" @focus="show" data-layout="compact" readonly="readonly"></div>
+					<div class="signUp-ct-item">
+						<div class="signUp-input border-1px"><input class="input-text" type="text" placeholder="邀请人(选填)" @focus="show" data-layout="compact" readonly="readonly"></div>
 					</div>
 				</div>
-				<div class="signOn-submit-btn">同意协议并注册</div>
+				<div class="signUp-submit-btn" @click="submitSignUp">同意协议并注册</div>
 				<p class="potocol"><span class="icon" :class="{'agree': agreeStatus}" @click="potocolStatus"></span>《有人贷网站服务协议》</p>
 			</div>
 		</div>
@@ -51,7 +51,8 @@
 				agreeStatus: true,
 				signFooter: {
 					descTxt: '已有账号？立即登录',
-					clickTpye: 0
+					routerPath: 'signIn',
+					show: true
 				},
 				visible: false,
 				allLayouts: VueTouchKeyboard.layouts,
@@ -85,14 +86,34 @@
 				this.hide();
 			},
 			next () {
-				this.verify_phone();
 				this.passwordVal = this.$refs.passwordWrapper.value;
-				let inputs = this.$refs.signOnContent.querySelectorAll('input');
+				let inputs = this.$refs.signUpContent.querySelectorAll('input');
 				let found = false;
 				[].forEach.call(inputs, (item, i) => {
 					if (!found && item === this.input && i < inputs.length - 1) {
 						found = true;
 						this.$nextTick(() => {
+							if (i === 0) {
+								if (!this.verify_phone()) {
+									inputs[i].focus();
+									return false;
+								}
+							} else if (i === 1) {
+								if (!this.verify_password()) {
+									inputs[i].focus();
+									return false;
+								}
+							} else if (i === 2) {
+								if (!this.verify_code()) {
+									inputs[i].focus();
+									return false;
+								}
+							} else if (i === 3) {
+								if (!this.verify_password()) {
+									inputs[i].focus();
+									return false;
+								}
+							}
 							inputs[i + 1].focus();
 						});
 					}
@@ -116,11 +137,101 @@
 			},
 			verify_phone () {
 				let _val = this.$refs.phoneNumber.value;
-				if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(_val))) {
-					console.log(_val);
-					return;
-				};
+				if (!_val && _val === '') {
+					this.$store.commit('setErrorTxt', '手机号码不能为空，请输入手机号码！');
+					this.$store.commit('setErrorStatus', true);
+					return false;
+				}
+
+				if (!(/^1[3|4|5|8][0-9]\d{8,8}$/.test(_val))) {
+					this.$store.commit('setErrorTxt', '手机号码不存在，请重新输入！');
+					this.$store.commit('setErrorStatus', true);
+					return false;
+				}
+
+				this.$store.commit('setErrorStatus', false);
+				this.$store.commit('setErrorTxt', '');
+
+				return true;
+			},
+			verify_password () {
+				let _val = this.$refs.passwordWrapper.value;
+				this.passwordVal = this.$refs.passwordWrapper.value;
+				if (_val === '') {
+					this.$store.commit('setErrorTxt', '注册密码不能为空，请输入注册密码！');
+					this.$store.commit('setErrorStatus', true);
+					return false;
+				}
+
+				if (!(/^(\w){8,16}$/.test(_val))) {
+					this.$store.commit('setErrorTxt', '注册密码只能是8-16位且不能含有特殊字符，请重新输入！');
+					this.$store.commit('setErrorStatus', true);
+					return false;
+				}
+
+				this.$store.commit('setErrorStatus', false);
+				this.$store.commit('setErrorTxt', '');
+
+				return true;
+			},
+			verify_code () {
+				let _val = this.$refs.codeNumber.value;
+				if (!_val && _val === '') {
+					this.$store.commit('setErrorTxt', '手机验证码不能为空，手机验证码！');
+					this.$store.commit('setErrorStatus', true);
+					return false;
+				}
+				if (_val !== '123456') {
+					this.$store.commit('setErrorTxt', '手机验证码错误，请重新输入！');
+					this.$store.commit('setErrorStatus', true);
+					return false;
+				}
+
+				this.$store.commit('setErrorStatus', false);
+				this.$store.commit('setErrorTxt', '');
+
+				return true;
+			},
+			verify_http () {
+				if (!this.agreeStatus) {
+					this.$store.commit('setErrorTxt', '请先阅读有人贷网站服务协议,并勾选！');
+					this.$store.commit('setErrorStatus', true);
+					return false;
+				}
+
+				this.$store.commit('setErrorStatus', false);
+				this.$store.commit('setErrorTxt', '');
+
+				return true;
+			},
+			submitSignUp () {
+				this.input.blur();
+				this.hide();
+				this.signBottom = 0;
+				this.passwordVal = this.$refs.passwordWrapper.value;
+				if (!this.verify_phone()) {
+					return false;
+				}
+
+				if (!this.verify_password()) {
+					return false;
+				}
+
+				if (!this.verify_code()) {
+					return false;
+				}
+
+				if (!this.verify_http()) {
+					return false;
+				}
+
+				this.$router.push('/realname');
 			}
+		},
+		mounted() {
+			this.$nextTick(() => {
+				this.input = this.$refs.signUpContent.querySelector('input');
+			});
 		},
 		components: {
 			Sign
@@ -131,9 +242,9 @@
 <style lang="scss">
 	@import '../../common/scss/mixin.scss';
 
-	.signOn-wrapper {
+	.signUp-wrapper {
 		padding: 20px 0 75px 0;
-		.signOn {
+		.signUp {
 			padding: 0 25px;
 			.select-type {
 				padding: 0 10px;
@@ -157,12 +268,12 @@
 					}
 				}
 			}
-			.signOn-content {
-				.signOn-ct-item {
+			.signUp-content {
+				.signUp-ct-item {
 					position: relative;
 					display: flex;
 					margin-top: 10px;
-					.signOn-input {
+					.signUp-input {
 						flex: 1;
 						&:after {
 							bottom: 0;
@@ -210,10 +321,10 @@
 						}
 					}
 					.getCode-btn {
-						flex: 0 0 80px;
+						flex: 0 0 100px;
 						line-height: 38px;
 						margin-left: 10px;
-						width: 80px;
+						width: 100px;
 						height: 38px;
 						font-size: 12px;
 						border-radius: 38px;
@@ -223,7 +334,7 @@
 					}
 				}
 			}
-			.signOn-submit-btn {
+			.signUp-submit-btn {
 				margin: 20px 20px 10px 20px;
 				line-height: 40px;
 				height: 40px;

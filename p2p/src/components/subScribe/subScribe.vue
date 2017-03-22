@@ -125,7 +125,7 @@
 				this.rateVal = interestRateVal;
 			},
 			setSubFalse () {
-				this.$store.commit('setFalse');
+				this.$store.commit('setScribeStatus', false);
 				this.$store.commit('clearProjectID');
 			}
 		},

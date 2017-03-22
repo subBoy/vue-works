@@ -8,8 +8,10 @@ import details from 'components/details/details';
 import list from 'components/list/list';
 import user from 'components/user/user';
 import index from 'components/index/index';
-import input from 'components/input/app';
-import signOn from 'components/signOn/signOn';
+import signUp from 'components/signUp/signUp';
+import signIn from 'components/signIn/signIn';
+import forgetPb from 'components/forgetpb/forgetPb';
+import realName from 'components/realName/realName';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
@@ -20,8 +22,10 @@ const routes = [
 	{path: '/detail', component: details},
 	{path: '/list', component: list},
 	{path: '/user', component: user},
-	{path: '/input', component: input},
-	{path: '/signOn', component: signOn}
+	{path: '/signUp', component: signUp},
+	{path: '/signIn', component: signIn},
+	{path: '/forgetpb', component: forgetPb},
+	{path: '/realname', component: realName}
 ];
 
 const router = new VueRouter({
@@ -39,14 +43,13 @@ const store = new Vuex.Store({
 			cancelText: '',
 			okText: ''
 		},
-		userId: ''
+		userId: '',
+		errorTxt: '',
+		errorStatus: false
 	},
 	mutations: {
-		setTrue (state) {
-			state.subScribeStatus = true;
-		},
-		setFalse (state) {
-			state.subScribeStatus = false;
+		setScribeStatus (state, bool) {
+			state.subScribeStatus = bool;
 		},
 		setProjectID (state, id) {
 			state.projectId = id;
@@ -79,6 +82,12 @@ const store = new Vuex.Store({
 		},
 		clearUserId (state, userId) {
 			state.userId = '';
+		},
+		setErrorTxt (state, errorTxt) {
+			state.errorTxt = errorTxt;
+		},
+		setErrorStatus (state, bool) {
+			state.errorStatus = bool;
 		}
 	}
 });

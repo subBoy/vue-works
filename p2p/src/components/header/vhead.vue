@@ -2,7 +2,7 @@
 	<div class="v-header-wrapper" ref="appA">
 		<div class="v-header">
 			<img class="v-logo" src="/static/images/logo.png" alt="">
-			<span class="v-login"><a href="" class="sign-on">注册</a>/<a href="" class="sign-in">登录</a></span>
+			<span class="v-login"><a class="sign-in" @click="signIn">登录</a>/<a class="sign-on" @click="signUp">注册</a></span>
 		</div>
 		<swiper :options="swiperOption" class="swiper-box" ref="myswiper">
 			<swiper-slide class="swiper-item" v-for="item in slideBanner">
@@ -63,8 +63,6 @@
 					}
 			  });
 		},
-		computed: {
-		},
 		methods: {
 			loadImage (url, callback) {
 		    let img = new Image();
@@ -77,6 +75,12 @@
 			call () {
 				this.$emit('scrollId');
 				this.$emit('load');
+			},
+			signIn () {
+				this.$router.push('signIn');
+			},
+			signUp () {
+				this.$router.push('signUp');
 			}
 		},
 		components: {

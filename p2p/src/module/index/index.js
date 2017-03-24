@@ -12,6 +12,7 @@ import signUp from 'components/signUp/signUp';
 import signIn from 'components/signIn/signIn';
 import forgetPb from 'components/forgetpb/forgetPb';
 import realName from 'components/realName/realName';
+import admin from 'components/admin/admin';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
@@ -25,7 +26,8 @@ const routes = [
 	{path: '/signUp', component: signUp},
 	{path: '/signIn', component: signIn},
 	{path: '/forgetpb', component: forgetPb},
-	{path: '/realname', component: realName}
+	{path: '/realname', component: realName},
+	{path: '/admin', component: admin}
 ];
 
 const router = new VueRouter({

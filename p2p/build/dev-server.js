@@ -7,6 +7,8 @@ if (!process.env.NODE_ENV) {
 
 var opn = require('opn')
 var path = require('path')
+var mongoose = require('mongoose')
+var Invest = require('./models/models')
 var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -21,6 +23,8 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+
+mongoose.connect('mongodb://192.168.1.124:9000/yourendai')
 
 var appData = require('../data.json')
 
@@ -70,10 +74,16 @@ apiRoutes.get('/strength', function(req, res) {
 })
 
 apiRoutes.get('/latestProject', function(req, res) {
-	res.json({
-		errno: 0,
-		data: latestProject
-	})
+	Invest.fetch(function (err, projectDatas) {
+		if (err) {
+			console.log(err)
+		}
+		console.log(projectDatas);
+		res.json({
+			errno: 0,
+			data: projectDatas
+		})
+	});
 })
 
 apiRoutes.get('/projectList', function(req, res) {

@@ -37,9 +37,10 @@
 		created () {
 			let _this = this;
 			axios.get('/api/latestProject').then(function (response) {
+				console.log(response);
 				response = response.data;
 				if (response.errno === ERR_OK) {
-					_this.latest = response.data;
+					_this.latest = response.data[0];
 					toCanvas('canvas', _this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, Math.PI * 1, 830, 50);
 					_this.$nextTick(() => {
 						_this.interestRate();
@@ -67,12 +68,12 @@
 						cancelText: '否',
 						okText: '是',
 						cancelOperate: 0,
-						OkOperate: 'signOn'
+						OkOperate: 'signIn'
 
 					});
 				} else {
 					this.$store.commit('setProjectID', id);
-					this.$store.commit('setTrue');
+					this.$store.commit('setScribeStatus', true);
 				}
 			}
 		}

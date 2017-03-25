@@ -1,5 +1,6 @@
 <template>
 	<div class="v-app">
+		<Error></Error>
 		<Guide :update="update" @notGui="notGuide"></Guide>
 		<transition :name="transitionName">
 			<keep-alive>
@@ -20,6 +21,7 @@
 	import Vfoot from 'components/footer/footer';
 	import SubScribe from 'components/subScribe/subScribe';
 	import Confirm from 'components/confirm/confirm';
+	import Error from 'components/error/error';
 	import {saveToLocal} from 'common/js/store';
 	import {urlParse} from 'common/js/util';
 	import axios from 'axios';
@@ -60,6 +62,8 @@
 				// 	this.transitionName = 'slideLeft';
 				// 	return;
 				// }
+				this.$store.commit('setErrorStatus', false);
+				this.$store.commit('setErrorTxt', '');
 				this.transitionName = 'slideRight';
 			}
 		},
@@ -68,7 +72,8 @@
 			Vindex,
 			Vfoot,
 			SubScribe,
-			Confirm
+			Confirm,
+			Error
 		}
 	};
 </script>

@@ -37,7 +37,6 @@
 		created () {
 			let _this = this;
 			axios.get('/api/latestProject').then(function (response) {
-				console.log(response);
 				response = response.data;
 				if (response.errno === ERR_OK) {
 					_this.latest = response.data[0];

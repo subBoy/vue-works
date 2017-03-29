@@ -10,6 +10,7 @@ var path = require('path')
 var mongoose = require('mongoose')
 var Invest = require('./models/models')
 var express = require('express')
+var bodyParser = require('body-parser')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
@@ -24,7 +25,9 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-mongoose.connect('mongodb://192.168.1.106:9000/yourendai')
+app.use(bodyParser())
+
+mongoose.connect('mongodb://yrd002:yrd002@192.168.1.106:9001/yourendai')
 
 var appData = require('../data.json')
 
@@ -74,27 +77,10 @@ apiRoutes.get('/strength', function(req, res) {
 })
 
 apiRoutes.get('/latestProject', function(req, res) {
-	var _Invest = new Invest({
-		id: '20170303172800',
-		name: '某医疗机构资金周转1611-2100',
-		Quota: 50,
-		term: 12,
-		interestRate: '10.0',
-		Hike: '1.5',
-		schedule: '65.75',
-		Balance: '171250',
-		startTime: '2014/03/08 08:30'
-	});
-	_Invest.save(function (err, invest) {
-		if (err) {
-			console.log(err)
-		}
-	});
 	Invest.fetch(function (err, projectDatas) {
 		if (err) {
 			console.log(err)
 		}
-		console.log(projectDatas);
 		res.json({
 			errno: 0,
 			data: projectDatas
@@ -108,6 +94,26 @@ apiRoutes.get('/projectList', function(req, res) {
 		data: projectList
 	})
 })
+
+app.post('/increase/project', function(req, res) {
+	var formData = req.body;
+	var _Invest = new Invest({
+		id: formData.itemNumber,
+		name: formData.itemName,
+		Quota: formData.raiseAmount,
+		term: formData.borrowingPeriod,
+		interestRate: formData.rateReturn,
+		Hike: formData.giftReturn,
+		schedule: 0,
+		Balance: formData.raiseAmount,
+		startTime: formData.startTime
+	});
+	_Invest.save(function (err, invest) {
+		if (err) {
+			console.log(err)
+		}
+	});
+});
 
 app.use('/api', apiRoutes)
 

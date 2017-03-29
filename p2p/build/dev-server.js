@@ -24,7 +24,7 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-mongoose.connect('mongodb://192.168.1.124:9000/yourendai')
+mongoose.connect('mongodb://192.168.1.106:9000/yourendai')
 
 var appData = require('../data.json')
 
@@ -74,6 +74,22 @@ apiRoutes.get('/strength', function(req, res) {
 })
 
 apiRoutes.get('/latestProject', function(req, res) {
+	var _Invest = new Invest({
+		id: '20170303172800',
+		name: '某医疗机构资金周转1611-2100',
+		Quota: 50,
+		term: 12,
+		interestRate: '10.0',
+		Hike: '1.5',
+		schedule: '65.75',
+		Balance: '171250',
+		startTime: '2014/03/08 08:30'
+	});
+	_Invest.save(function (err, invest) {
+		if (err) {
+			console.log(err)
+		}
+	});
 	Invest.fetch(function (err, projectDatas) {
 		if (err) {
 			console.log(err)

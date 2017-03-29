@@ -24,7 +24,7 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-mongoose.connect('mongodb://192.168.1.124:9000/yourendai')
+mongoose.connect('mongodb://yrd002:yrd002@192.168.1.124:9001/yourendai')
 
 var appData = require('../data.json')
 
@@ -92,6 +92,11 @@ apiRoutes.get('/projectList', function(req, res) {
 		data: projectList
 	})
 })
+
+apiRoutes.post('/increase/project', function(req, res) {
+	var formData = req.body;
+	console.log(formData);
+});
 
 app.use('/api', apiRoutes)
 

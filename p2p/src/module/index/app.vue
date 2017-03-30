@@ -4,7 +4,7 @@
 		<Guide :update="update" @notGui="notGuide"></Guide>
 		<transition :name="transitionName">
 			<keep-alive>
-				<router-view></router-view>
+				<router-view :projectDatas="projectDatas"></router-view>
 			</keep-alive>
 		</transition>
 		<keep-alive>
@@ -38,7 +38,8 @@
           })()
 				},
 				transitionName: '',
-				subScribeStatus: false
+				subScribeStatus: false,
+				projectDatas: []
 			};
 		},
 		created () {
@@ -49,6 +50,12 @@
 					_this.update = Object.assign({}, _this.update, response.data);
 				}
 		  });
+			axios.get('/api/latestProject').then(function (response) {
+				response = response.data;
+				if (response.errno === ERR_OK) {
+					_this.projectDatas = response.data;
+				}
+			});
 		},
 		methods: {
 			notGuide () {

@@ -19,13 +19,16 @@
 </template>
 
 <script>
-	import axios from 'axios';
 	import {toCanvas} from 'common/js/canvas';
 	import {loadFromLocal} from 'common/js/store';
 
-	const ERR_OK = 0;
-
 	export default {
+		props: {
+			projectDatas: {
+				type: Array,
+				default: []
+			}
+		},
 		data () {
 			return {
 				latest: {
@@ -33,19 +36,6 @@
 				},
 				rateVal: 0
 			};
-		},
-		created () {
-			let _this = this;
-			axios.get('/api/latestProject').then(function (response) {
-				response = response.data;
-				if (response.errno === ERR_OK) {
-					_this.latest = response.data[0];
-					toCanvas('canvas', _this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, Math.PI * 1, 830, 50);
-					_this.$nextTick(() => {
-						_this.interestRate();
-					});
-				}
-			});
 		},
 		methods: {
 			interestRate () {
@@ -74,6 +64,21 @@
 					this.$store.commit('setProjectID', id);
 					this.$store.commit('setScribeStatus', true);
 				}
+			},
+			init () {
+				this.latest = this.projectDatas[0];
+				this.$nextTick(() => {
+					toCanvas('canvas', this.latest.schedule, Math.PI * 1, Math.PI * 2, Math.PI * 1, Math.PI * 1, 830, 50);
+					this.interestRate();
+				});
+			}
+		},
+		mounted () {
+			this.init();
+		},
+		watch: {
+			'projectDatas': function () {
+				this.init();
 			}
 		}
 	};

@@ -7,7 +7,7 @@
 					<Vhead @load="loading" @scrollId="idScroll"></Vhead>
 					<active @scrollId="idScroll" :activeData="activeData"></active>
 					<Bg @scrollId="idScroll"></Bg>
-					<Latest></Latest>
+					<Latest :projectDatas="projectDatas"></Latest>
 				</div>
 			</div>
 		</div>
@@ -26,6 +26,12 @@
 	const ERR_OK = 0;
 
 	export default {
+		props: {
+			projectDatas: {
+				type: Array,
+				default: []
+			}
+		},
 		data () {
 			return {
 				loaded: true,

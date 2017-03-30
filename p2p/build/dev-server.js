@@ -27,7 +27,7 @@ var app = express()
 
 app.use(bodyParser())
 
-mongoose.connect('mongodb://yrd002:yrd002@192.168.1.106:9001/yourendai')
+mongoose.connect('mongodb://yrd002:yrd002@192.168.1.124:9001/yourendai')
 
 var appData = require('../data.json')
 
@@ -110,8 +110,14 @@ app.post('/increase/project', function(req, res) {
 	});
 	_Invest.save(function (err, invest) {
 		if (err) {
-			console.log(err)
+			console.log(err);
+			res.json({
+				data: 1
+			})
 		}
+		res.json({
+			data: 1
+		})
 	});
 });
 

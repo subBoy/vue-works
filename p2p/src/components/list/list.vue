@@ -39,12 +39,16 @@
 	import BScroll from 'better-scroll';
 	import Vtitle from 'components/title/title';
 	import {toCanvas} from 'common/js/canvas';
-	import axios from 'axios';
 
-	const ERR_OK = 0;
 	let loadingBl = true;
 
 	export default {
+		props: {
+			projectDatas: {
+				type: Array,
+				default: []
+			}
+		},
 		data () {
 			return {
 				titleData: {
@@ -110,24 +114,23 @@
 				return emitM++;
 			}
 		},
+		watch: {
+			'projectDatas': function () {
+				this.loadingData();
+			}
+		},
 		methods: {
 			loadingData () {
-				let _this = this;
-				axios.get('/api/projectList').then(function(response) {
-					response = response.data;
-					if (response.errno === ERR_OK) {
-						_this.listsDatas = response.data;
-						for (var i = 0; i < response.data.length; i++) {
-							let nowTime = new Date().getTime();
-							let startTime = new Date(response.data[i].startTime).getTime();
-							if (nowTime >= startTime) {
-								_this.classList.push('started');
-							} else {
-								_this.classList.push('startBefore');
-							}
-						};
+				this.listsDatas = this.projectDatas;
+				for (var i = 0; i < this.listsDatas.length; i++) {
+					let nowTime = new Date().getTime();
+					let startTime = new Date(this.listsDatas[i].startTime).getTime();
+					if (nowTime >= startTime) {
+						this.classList.push('started');
+					} else {
+						this.classList.push('startBefore');
 					}
-				});
+				};
 			},
 			_initScroll (event) {
         if (!this.listScroll) {
